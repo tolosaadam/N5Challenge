@@ -1,9 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api", "N5Challenge.Api\N5Challenge.Api.csproj", "{79408BF8-2FA2-44AE-8DCD-99C72A585524}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4A9DFDE9-ECA8-43BD-9062-4B3574AD2029}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{6B82933B-2A34-453F-A975-DA5930FF231B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{F48E7DFF-9606-4A20-99FB-E1F4D87A38E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{BF64CF7F-5E33-4E81-B88A-4A75DC8867D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Domain", "N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj", "{D1062E83-B272-46AA-A561-CAAB3FC86872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Application", "N5Challenge.Api.Application\N5Challenge.Api.Application.csproj", "{20125E65-2B33-419F-A0C0-2D888B57C584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Application.Interfaces", "N5Challenge.Api.Application.Interfaces\N5Challenge.Api.Application.Interfaces.csproj", "{979CD6D9-9A19-452E-B779-F06DB47C9CF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.SQL", "N5Challenge.Api.Infraestructure.SQL\N5Challenge.Api.Infraestructure.SQL.csproj", "{27EDD6D2-8249-4CD5-A598-6EB6099D60F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.ElascticSearch", "N5Challenge.Api.Infraestructure.ElascticSearch\N5Challenge.Api.Infraestructure.ElascticSearch.csproj", "{DB7673E4-4160-401D-A999-68FE547A0ACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.Kafka", "N5Challenge.Api.Infraestructure.Kafka\N5Challenge.Api.Infraestructure.Kafka.csproj", "{3785EA76-C85D-4D18-A397-471552D44733}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9BD79828-ED9B-4F11-9989-F61AA668B83B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +37,41 @@ Global
 		{79408BF8-2FA2-44AE-8DCD-99C72A585524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79408BF8-2FA2-44AE-8DCD-99C72A585524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79408BF8-2FA2-44AE-8DCD-99C72A585524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1062E83-B272-46AA-A561-CAAB3FC86872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1062E83-B272-46AA-A561-CAAB3FC86872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1062E83-B272-46AA-A561-CAAB3FC86872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1062E83-B272-46AA-A561-CAAB3FC86872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20125E65-2B33-419F-A0C0-2D888B57C584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20125E65-2B33-419F-A0C0-2D888B57C584}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20125E65-2B33-419F-A0C0-2D888B57C584}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20125E65-2B33-419F-A0C0-2D888B57C584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979CD6D9-9A19-452E-B779-F06DB47C9CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979CD6D9-9A19-452E-B779-F06DB47C9CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979CD6D9-9A19-452E-B779-F06DB47C9CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979CD6D9-9A19-452E-B779-F06DB47C9CF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27EDD6D2-8249-4CD5-A598-6EB6099D60F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EDD6D2-8249-4CD5-A598-6EB6099D60F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EDD6D2-8249-4CD5-A598-6EB6099D60F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EDD6D2-8249-4CD5-A598-6EB6099D60F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB7673E4-4160-401D-A999-68FE547A0ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB7673E4-4160-401D-A999-68FE547A0ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB7673E4-4160-401D-A999-68FE547A0ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB7673E4-4160-401D-A999-68FE547A0ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3785EA76-C85D-4D18-A397-471552D44733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3785EA76-C85D-4D18-A397-471552D44733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3785EA76-C85D-4D18-A397-471552D44733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3785EA76-C85D-4D18-A397-471552D44733}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79408BF8-2FA2-44AE-8DCD-99C72A585524} = {4A9DFDE9-ECA8-43BD-9062-4B3574AD2029}
+		{D1062E83-B272-46AA-A561-CAAB3FC86872} = {F48E7DFF-9606-4A20-99FB-E1F4D87A38E2}
+		{20125E65-2B33-419F-A0C0-2D888B57C584} = {6B82933B-2A34-453F-A975-DA5930FF231B}
+		{979CD6D9-9A19-452E-B779-F06DB47C9CF0} = {6B82933B-2A34-453F-A975-DA5930FF231B}
+		{27EDD6D2-8249-4CD5-A598-6EB6099D60F0} = {BF64CF7F-5E33-4E81-B88A-4A75DC8867D0}
+		{DB7673E4-4160-401D-A999-68FE547A0ACE} = {BF64CF7F-5E33-4E81-B88A-4A75DC8867D0}
+		{3785EA76-C85D-4D18-A397-471552D44733} = {BF64CF7F-5E33-4E81-B88A-4A75DC8867D0}
 	EndGlobalSection
 EndGlobal
