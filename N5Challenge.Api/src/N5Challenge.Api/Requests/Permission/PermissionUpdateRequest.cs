@@ -1,8 +1,8 @@
-﻿namespace N5Challenge.Api.Responses.Permission;
-public record PermissionResponse(
-    int Id,
+﻿namespace N5Challenge.Api.Requests.Permission;
+
+public record PermissionUpdateRequest(
     string EmployeeFirstName,
     string EmployeeLastName,
     int PermissionTypeId,
     DateTime Date
-);
+    );

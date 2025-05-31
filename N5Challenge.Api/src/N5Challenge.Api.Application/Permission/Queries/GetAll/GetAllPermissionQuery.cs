@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using N5Challenge.Api.Application.Interfaces;
+using N5Challenge.Api.Application.Interfaces.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +11,14 @@ namespace N5Challenge.Api.Application.Permission.Queries.GetAll;
 
 public record GetAllPermissionQuery() : IRequest<IEnumerable<Domain.Permission>>;
 
-public class GetAllPermissionQueryHandler : IRequestHandler<GetAllPermissionQuery, IEnumerable<Domain.Permission>>
+public class GetAllPermissionQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllPermissionQuery, IEnumerable<Domain.Permission>>
 {
-    public GetAllPermissionQueryHandler()
-    {
-
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IEnumerable<Domain.Permission>> Handle(GetAllPermissionQuery request, CancellationToken cancellationToken)
     {
-        
-        return new List<Domain.Permission>();
+        var repo = _unitOfWork.GetRepository<IPermissionRepository>();
+        var permissions = await repo.GetAllAsync(cancellationToken);
+        return permissions;
     }
 }

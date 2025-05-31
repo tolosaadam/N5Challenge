@@ -2,9 +2,8 @@
 
 namespace N5Challenge.Api.Requests.Permission;
 
-public record PermissionRequest(
+public record PermissionCreateRequest(
     string EmployeeFirstName,
     string EmployeeLastName,
-    PermissionTypeResponse Type,
-    DateTime Date
+    int PermissionTypeId
     );

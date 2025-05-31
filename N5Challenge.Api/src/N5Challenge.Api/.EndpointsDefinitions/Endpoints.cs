@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
+using System.Numerics;
 
 namespace N5Challenge.Api.EndpointsDefinitions;
 
@@ -23,11 +24,10 @@ public class Endpoints
     internal static async Task<IResult> Create(
         [FromServices] IMediator mediator,
         [FromServices] IMapper autoMapper,
-        Requests.Permission.PermissionRequest request,
+        Requests.Permission.PermissionCreateRequest request,
         CancellationToken cancellationToken)
     {
-        var permission = autoMapper.Map<Requests.Permission.PermissionRequest, Domain.Permission>(request);
-        var command = new CreatePermissionCommand(permission);
+        var command = autoMapper.Map<CreatePermissionCommand>(request);
         var result = await mediator.Send(command, cancellationToken);
         return Results.Created($"/api/permissions/{result}", new { id = result });
     }
@@ -36,11 +36,10 @@ public class Endpoints
         [FromServices] IMediator mediator,
         [FromServices] IMapper autoMapper,
         int id,
-        Requests.Permission.PermissionRequest request,
+        Requests.Permission.PermissionUpdateRequest request,
         CancellationToken cancellationToken)
     {
-        var permission = autoMapper.Map<Requests.Permission.PermissionRequest, Domain.Permission>(request);
-        var command = new UpdatePermissionCommand(id, permission);
+        var command = autoMapper.Map<UpdatePermissionCommand>((request, id));
         await mediator.Send(command, cancellationToken);
         return Results.NoContent();
     }
