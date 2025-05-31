@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\N5Challenge.Api.Application.Interfaces\N5Challenge.Api.Application.Interfaces.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj" />
   </ItemGroup>
 

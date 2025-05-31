@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\N5Challenge.Api.Application.Interfaces\N5Challenge.Api.Application.Interfaces.csproj" />
+    <ProjectReference Include="..\N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

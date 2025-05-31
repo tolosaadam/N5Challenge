@@ -16,12 +16,14 @@
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.5" />
     <PackageReference Include="Scrutor" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\N5Challenge.Api.Application\N5Challenge.Api.Application.csproj" />
+    <ProjectReference Include="..\N5Challenge.Api.Infraestructure.SQL\N5Challenge.Api.Infraestructure.SQL.csproj" />
   </ItemGroup>
 
 </Project>
