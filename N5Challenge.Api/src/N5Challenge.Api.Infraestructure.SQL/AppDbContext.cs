@@ -22,6 +22,21 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+        modelBuilder.Entity<PermissionDB>(entity =>
+        {
+            entity.HasKey(p => p.Id);
+
+            entity.HasOne(p => p.Type)
+                  .WithMany(pt => pt.Permissions)
+                  .HasForeignKey(p => p.PermissionTypeId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<PermissionTypeDB>(entity =>
+        {
+            entity.HasKey(pt => pt.Id);
+        });
+
         modelBuilder.Entity<PermissionTypeDB>().HasData(
         new PermissionTypeDB { Id = 1, Description = "unknown 1" },
         new PermissionTypeDB { Id = 2, Description = "unknown 2" });

@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using N5Challenge.Api.Application;
 using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.AutoMapperProfiles;
@@ -43,10 +40,25 @@ public static class ServicesCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddInfraestructureSettings(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfraestructureSettings(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        // DbContext
-        services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+        if (environment.IsDevelopment())
+        {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("N5ChallengeDb");
+            });
+        }
+        else
+        {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), x =>
+                {
+                    x.MigrationsAssembly("N5Challenge.Api.Infraestructure.SQL");
+                });
+            });
+        }
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IRepositoryFactory, RepositoryFactory>();
@@ -57,6 +69,13 @@ public static class ServicesCollectionExtensions
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
+
+        return services;
+    }
+
+    public static IServiceCollection AddSwaggerSettings(this IServiceCollection services)
+    {
+        services.AddSwaggerGen();
 
         return services;
     }
