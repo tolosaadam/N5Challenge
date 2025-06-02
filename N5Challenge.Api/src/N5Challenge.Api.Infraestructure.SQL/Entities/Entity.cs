@@ -1,4 +1,4 @@
-﻿using N5Challenge.Api.Application.Interfaces;
+﻿using N5Challenge.Api.Application.Interfaces.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;

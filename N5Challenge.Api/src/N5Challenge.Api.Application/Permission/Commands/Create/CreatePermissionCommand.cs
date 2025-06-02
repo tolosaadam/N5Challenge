@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
+using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +16,10 @@ namespace N5Challenge.Api.Application.Permission.Commands.Create;
 public record CreatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
-    int PermissionTypeId) : IRequest<int>;
+    int PermissionTypeId) : IRequest<int>, ICommand, IAuditable, IPublishEvent
+{
+    public OperationEnum Operation => OperationEnum.request;
+}
 
 public class CreatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper autoMapper) : IRequestHandler<CreatePermissionCommand, int>
 {
@@ -23,28 +28,26 @@ public class CreatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper auto
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
-        try
+        var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();
+
+        var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
+
+        if (ptDomain is null)
         {
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
-
-            var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
-            
-            var pDomain = _autoMapper.Map<Domain.Permission>(request);
-
-            pDomain.Date = DateTime.UtcNow;
-
-            await pRepository.AddAsync(pDomain, cancellationToken);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
-            return pDomain.Id;
+            throw new RelatedEntityNotFoundException(
+                nameof(Domain.Permission),
+                nameof(Domain.PermissionType),
+                request.PermissionTypeId);
         }
-        catch
-        {
-            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            throw;
-        }
+
+        var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
+
+        var pDomain = _autoMapper.Map<Domain.Permission>(request);
+
+        pDomain.Date = DateTime.UtcNow;
+
+        var result = await pRepository.AddAsync(pDomain, cancellationToken);
+
+        return result;
     }
 }
