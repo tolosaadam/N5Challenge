@@ -2,12 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
-using N5Challenge.Api.Infraestructure.SQL.Entities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,22 +19,22 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
     protected readonly DbSet<TEntityModel> _dbSet = context.Set<TEntityModel>();
     private readonly IMapper _autoMapper = autoMapper;
 
-    public virtual TId Add(TDomainModel domainModel)
+    public virtual Func<TId> Add(TDomainModel domainModel)
     {
         var entityModel = MapToEntityModel(domainModel);
 
         _dbSet.Add(entityModel);
 
-        return entityModel.Id;
+        return () => entityModel.Id;
     }    
 
-    public virtual async Task<TId> AddAsync(TDomainModel domainModel, CancellationToken cancellationToken = default)
+    public virtual async Task<Func<TId>> AddAsync(TDomainModel domainModel, CancellationToken cancellationToken = default)
     {
         var entityModel = MapToEntityModel(domainModel);
 
         await _dbSet.AddAsync(entityModel, cancellationToken);
 
-        return entityModel.Id;
+        return () => entityModel.Id;
     }
         
     public IEnumerable<TDomainModel> GetAll() =>

@@ -9,5 +9,5 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IEntity<TId>
 {
-    TId Id { get; set; }
+    TId Id { get; }
 }

@@ -46,8 +46,12 @@ public class CreatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper auto
 
         pDomain.Date = DateTime.UtcNow;
 
-        var result = await pRepository.AddAsync(pDomain, cancellationToken);
+        var getId = await pRepository.AddAsync(pDomain, cancellationToken);
 
-        return result;
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var id = getId();
+
+        return id;
     }
 }
