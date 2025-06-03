@@ -5,9 +5,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Application.Interfaces;
+namespace N5Challenge.Api.Domain;
 
 public interface IEntity<TId>
 {
-    TId Id { get; set; }
+    TId Id { get; }
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Domain;
+namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public class PermissionType : Entity<int>
+public interface ICommand
 {
-    public string? Description { get; set; }
 }

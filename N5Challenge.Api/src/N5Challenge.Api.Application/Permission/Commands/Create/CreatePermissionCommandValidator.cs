@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using System;
 using System.Collections.Generic;
@@ -15,22 +16,22 @@ public class CreatePermissionCommandValidator : AbstractValidator<CreatePermissi
         RuleFor(m => m.EmployeeLastName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                    .WithMessage(ValidationMessages.Empty)
+                    .WithMessage(ValidationMessagesConstants.Empty)
                 .NotNull()
-                    .WithMessage(ValidationMessages.Null);
+                    .WithMessage(ValidationMessagesConstants.Null);
 
         RuleFor(m => m.EmployeeFirstName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                    .WithMessage(ValidationMessages.Empty)
+                    .WithMessage(ValidationMessagesConstants.Empty)
                 .NotNull()
-                    .WithMessage(ValidationMessages.Null);
+                    .WithMessage(ValidationMessagesConstants.Null);
 
         RuleFor(m => m.PermissionTypeId)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                    .WithMessage(ValidationMessages.Empty)
+                    .WithMessage(ValidationMessagesConstants.Empty)
                 .NotNull()
-                    .WithMessage(ValidationMessages.Null);
+                    .WithMessage(ValidationMessagesConstants.Null);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using N5Challenge.Api.Application.Models;
 
 namespace N5Challenge.Api.AutoMapperProfiles;
 
@@ -33,6 +34,18 @@ public class PermissionProfile : Profile
         _ = CreateMap<Domain.Permission,
             Infraestructure.SQL.Entities.PermissionDB>()
             .ReverseMap();
+
+        _ = CreateMap<Domain.Permission,
+            IndexablePermission>()
+            .ForMember(src => src.Id, opt => opt.MapFrom(opt => opt.Id.ToString()));
+
+        _ = CreateMap<(Domain.Permission permission, int id),
+            IndexablePermission>()
+            .ForMember(src => src.Id, opt => opt.MapFrom(opt => opt.id.ToString()))
+            .ForMember(src => src.EmployeeLastName, opt => opt.MapFrom(opt => opt.permission.EmployeeLastName))
+            .ForMember(src => src.EmployeeFirstName, opt => opt.MapFrom(opt => opt.permission.EmployeeFirstName))
+            .ForMember(src => src.Date, opt => opt.MapFrom(opt => opt.permission.Date))
+            .ForMember(src => src.PermissionTypeId, opt => opt.MapFrom(opt => opt.permission.PermissionTypeId));
 
         _ = CreateMap<Domain.Permission,
             Responses.Permission.PermissionResponse>();
