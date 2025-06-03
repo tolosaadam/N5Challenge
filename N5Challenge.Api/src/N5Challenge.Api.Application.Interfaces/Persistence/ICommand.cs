@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Domain;
+namespace N5Challenge.Api.Application.Interfaces;
 
-public class IndexableEntity : Entity<string> , IIndexableEntity
+public interface ICommand
 {
 }

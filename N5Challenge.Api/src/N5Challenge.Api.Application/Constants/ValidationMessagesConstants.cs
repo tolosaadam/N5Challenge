@@ -1,4 +1,4 @@
-﻿namespace N5Challenge.Api.Application.Models.Constants;
+﻿namespace N5Challenge.Api.Application.Constants;
 
 public static class ValidationMessagesConstants
 {

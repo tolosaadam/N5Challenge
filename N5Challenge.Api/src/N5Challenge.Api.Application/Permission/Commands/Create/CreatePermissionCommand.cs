@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
+using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
-using N5Challenge.Api.Application.Models.Constants;
-using N5Challenge.Api.Application.Models.Interfaces;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using N5Challenge.Api.Domain.Enums;
 using System;
@@ -27,12 +27,12 @@ public record CreatePermissionCommand(
 public class CreatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch<IndexablePermission> elasticSearch) 
+    IElasticSearch elasticSearch) 
     : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch<IndexablePermission> _elasticSearch = elasticSearch;
+    private readonly IElasticSearch _elasticSearch = elasticSearch;
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {

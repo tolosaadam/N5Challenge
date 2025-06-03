@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using N5Challenge.Api.Application.Models.Constants;
+using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using System;
 using System.Collections.Generic;

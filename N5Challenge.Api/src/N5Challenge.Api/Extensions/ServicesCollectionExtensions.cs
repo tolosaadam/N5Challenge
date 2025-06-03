@@ -91,7 +91,7 @@ public static class ServicesCollectionExtensions
 
         services.AddSingleton<IElasticClient>(elasticClient);
 
-        services.AddScoped(typeof(IElasticSearch<>), typeof(ElasticSearch<>));
+        services.AddScoped(typeof(IElasticSearch), typeof(ElasticSearch));
         return services;
     }
 }
