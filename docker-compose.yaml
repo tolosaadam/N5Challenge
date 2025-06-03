@@ -63,9 +63,68 @@ services:
     networks:
       - backend
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-net
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "9090:8080"
+    networks:
+      - kafka-net
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    depends_on:
+      - kafka
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"       # Puerto externo para acceder desde localhost
+      - "29092:29092"     # Puerto interno para comunicación dentro de docker
+    networks:
+      - kafka-net
+      - backend
+    environment:
+      KAFKA_BROKER_ID: 1
+
+      # Conexión a Zookeeper
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+      # Mapear listeners internos y externos
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+
+      # Kafka escuchará en 2 puertos diferentes
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+
+      # Lo que Kafka "anuncia" a los clientes, interno y externo
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+
+      # Listener para comunicación entre brokers (solo uno acá, pero se define igual)
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+
+      # Replicación de tópicos internos
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+      # Auto crear tópicos
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
 volumes:
   sqlserverdata:
   elasticsearch-data:
 
 networks:
+  kafka-net:
   backend:

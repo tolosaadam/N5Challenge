@@ -2,7 +2,6 @@
 using MediatR;
 using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Commands.Create;
@@ -23,6 +22,7 @@ public record UpdatePermissionCommand(
     DateTime Date) : IRequest, ICommand, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.modify;
+    public string Topic => "permission";
 }
 
 public class UpdatePermissionCommandHandler(

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Domain.Configuration;
+namespace N5Challenge.Api.Infraestructure.Services.ElasticSearch;
 
 public class ElasticSearchSettings
 {

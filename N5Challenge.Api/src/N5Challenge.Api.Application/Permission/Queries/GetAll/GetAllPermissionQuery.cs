@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using N5Challenge.Api.Application.Constants;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Domain.Enums;
@@ -16,6 +15,8 @@ namespace N5Challenge.Api.Application.Permission.Queries.GetAll;
 public record GetAllPermissionQuery() : IRequest<IEnumerable<Domain.Permission>>, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.get;
+
+    public string Topic => "permission";
 }
 
 public class GetAllPermissionQueryHandler(

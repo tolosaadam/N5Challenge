@@ -2,7 +2,6 @@
 using MediatR;
 using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
@@ -22,6 +21,7 @@ public record CreatePermissionCommand(
     int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.request;
+    public string Topic => "permission";
 }
 
 public class CreatePermissionCommandHandler(

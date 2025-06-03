@@ -1,4 +1,4 @@
-﻿using N5Challenge.Api.Domain;
+﻿using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IIndexableEntity : IEntity<string>
+public interface IKafkaProducer
 {
+    Task SendMessageAsync(string topic, OperationEnum operation, CancellationToken cancellationToken = default);
 }

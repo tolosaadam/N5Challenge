@@ -1,10 +1,7 @@
 ﻿
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain;
-using N5Challenge.Api.Domain.Configuration;
 using Nest;
 using System.Threading;
 

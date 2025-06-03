@@ -18,7 +18,8 @@ builder.Services
     .AddInfraestructureSettings(builder.Configuration, builder.Environment)
     .AddSwaggerSettings()
     .AddBehaviorSettings()
-    .AddElasticSearchSettings(builder.Configuration);
+    .AddElasticSearchSettings(builder.Configuration)
+    .AddKafkaSettings(builder.Configuration);
 
 var app = builder.Build();
 
