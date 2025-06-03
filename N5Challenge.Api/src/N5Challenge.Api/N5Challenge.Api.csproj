@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\N5Challenge.Api.Application\N5Challenge.Api.Application.csproj" />
+    <ProjectReference Include="..\N5Challenge.Api.Infraestructure.Services.ElasticSearch\N5Challenge.Api.Infraestructure.Services.ElasticSearch.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Infraestructure.SQL\N5Challenge.Api.Infraestructure.SQL.csproj" />
   </ItemGroup>
 

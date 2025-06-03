@@ -7,7 +7,10 @@ using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using N5Challenge.Api.AutoMapperProfiles;
+using N5Challenge.Api.Domain.Configuration;
+using N5Challenge.Api.Infraestructure.Services.ElasticSearch;
 using N5Challenge.Api.Infraestructure.SQL;
+using Nest;
 
 namespace N5Challenge.Api.Extensions;
 
@@ -69,9 +72,26 @@ public static class ServicesCollectionExtensions
     public static IServiceCollection AddBehaviorSettings(this IServiceCollection services)
     {
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(EventBehavior<,>));
 
+        return services;
+    }
+
+    public static IServiceCollection AddElasticSearchSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+
+        services.Configure<ElasticSearchSettings>(configuration.GetSection("ElasticSearch"));
+
+        var settings = new ConnectionSettings(new Uri(configuration["ElasticSearch:Url"]))
+        .DisableDirectStreaming()
+        .EnableApiVersioningHeader()
+        .DefaultIndex(configuration["ElasticSearch:IndexName"]);
+
+        var elasticClient = new ElasticClient(settings);
+
+        services.AddSingleton<IElasticClient>(elasticClient);
+
+        services.AddScoped(typeof(IElasticSearch<>), typeof(ElasticSearch<>));
         return services;
     }
 }

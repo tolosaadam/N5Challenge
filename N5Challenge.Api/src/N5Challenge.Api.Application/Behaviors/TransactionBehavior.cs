@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
+using N5Challenge.Api.Application.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

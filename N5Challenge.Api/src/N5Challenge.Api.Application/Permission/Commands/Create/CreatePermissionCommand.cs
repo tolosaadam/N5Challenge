@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using N5Challenge.Api.Application.Exceptions;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
+using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Application.Models.Constants;
+using N5Challenge.Api.Application.Models.Interfaces;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using N5Challenge.Api.Domain.Enums;
 using System;
@@ -10,21 +12,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace N5Challenge.Api.Application.Permission.Commands.Create;
 
 public record CreatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
-    int PermissionTypeId) : IRequest<int>, ICommand, IAuditable, IPublishEvent
+    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.request;
 }
 
-public class CreatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper autoMapper) : IRequestHandler<CreatePermissionCommand, int>
+public class CreatePermissionCommandHandler(
+    IUnitOfWork unitOfWork,
+    IMapper autoMapper,
+    IElasticSearch<IndexablePermission> elasticSearch) 
+    : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
+    private readonly IElasticSearch<IndexablePermission> _elasticSearch = elasticSearch;
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
@@ -51,6 +59,11 @@ public class CreatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper auto
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var id = getId();
+
+        #region ElasticSearch
+        var indexablePermission = _autoMapper.Map<IndexablePermission>((pDomain, id));
+        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
+        #endregion
 
         return id;
     }

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Application.Interfaces.Persistence;
+namespace N5Challenge.Api.Domain;
 
 public interface IEntity<TId>
 {

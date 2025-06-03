@@ -17,7 +17,8 @@ builder.Services
     .AddValidatorSettings()
     .AddInfraestructureSettings(builder.Configuration, builder.Environment)
     .AddSwaggerSettings()
-    .AddBehaviorSettings();
+    .AddBehaviorSettings()
+    .AddElasticSearchSettings(builder.Configuration);
 
 var app = builder.Build();
 

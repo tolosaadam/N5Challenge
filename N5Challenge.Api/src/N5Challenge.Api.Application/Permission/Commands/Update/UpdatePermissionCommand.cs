@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using N5Challenge.Api.Application.Exceptions;
-using N5Challenge.Api.Application.Interfaces;
 using N5Challenge.Api.Application.Interfaces.Persistence;
+using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Application.Models.Constants;
+using N5Challenge.Api.Application.Models.Interfaces;
 using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Domain.Enums;
 using System;
@@ -18,15 +20,20 @@ public record UpdatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
     int PermissionTypeId,
-    DateTime Date) : IRequest, ICommand, IAuditable, IPublishEvent
+    DateTime Date) : IRequest, ICommand, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.modify;
 }
 
-public class UpdatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper autoMapper) : IRequestHandler<UpdatePermissionCommand>
+public class UpdatePermissionCommandHandler(
+    IUnitOfWork unitOfWork,
+    IMapper autoMapper,
+    IElasticSearch<IndexablePermission> elasticSearch) 
+    : IRequestHandler<UpdatePermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
+    private readonly IElasticSearch<IndexablePermission> _elasticSearch = elasticSearch;
 
 
     public async Task Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
@@ -55,6 +62,11 @@ public class UpdatePermissionCommandHandler(IUnitOfWork unitOfWork, IMapper auto
 
         var pDomain = _autoMapper.Map<Domain.Permission>(request);
 
-        pRepository.Update(pDomain);
+        var updatedP = pRepository.Update(pDomain);
+
+        #region ElasticSearch
+        var indexablePermission = _autoMapper.Map<IndexablePermission>(updatedP);
+        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
+        #endregion
     }
 }

@@ -1,1 +1,0 @@
-﻿namespace N5Challenge.Api.Infraestructure.Kafka;

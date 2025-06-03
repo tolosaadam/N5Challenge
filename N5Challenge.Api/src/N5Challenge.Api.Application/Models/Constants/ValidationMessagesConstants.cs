@@ -1,6 +1,6 @@
-﻿namespace N5Challenge.Api.Application;
+﻿namespace N5Challenge.Api.Application.Models.Constants;
 
-public static class ValidationMessages
+public static class ValidationMessagesConstants
 {
     public const string Null = "{PropertyName} no debe ser nulo.";
     public const string Empty = "{PropertyName} no debe estar vacío.";

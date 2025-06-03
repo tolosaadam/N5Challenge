@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Domain;
 
-public class PermissionType : Entity<int>
+public interface IIndexableEntity : IEntity<string>
 {
-    public string? Description { get; set; }
 }

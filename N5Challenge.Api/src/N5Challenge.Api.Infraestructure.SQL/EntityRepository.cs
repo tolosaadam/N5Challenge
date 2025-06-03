@@ -13,7 +13,7 @@ namespace N5Challenge.Api.Infraestructure.SQL;
 public class EntityRepository<TDomainModel, TEntityModel, TId>(
     AppDbContext context,
     IMapper autoMapper) : Repository(context), IEntityRepository<TDomainModel, TId>
-    where TDomainModel : class
+    where TDomainModel : class, IEntity<TId>
     where TEntityModel : class, IEntity<TId>
 {
     protected readonly DbSet<TEntityModel> _dbSet = context.Set<TEntityModel>();
@@ -64,14 +64,19 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
             .FirstOrDefaultAsync(x => x.Id!.Equals(id), cancellationToken: cancellationToken)
         );
 
-    public virtual void Delete(TDomainModel entity) =>
+    public virtual void Delete(TDomainModel domainModel) =>
         _dbSet
-        .Remove(MapToEntityModel(entity));
+        .Remove(MapToEntityModel(domainModel));
 
 
-    public virtual void Update(TDomainModel entity) =>
-        _dbSet
-        .Update(MapToEntityModel(entity));
+    public virtual TDomainModel? Update(TDomainModel domainModel)
+    {
+        var entityModel = MapToEntityModel(domainModel);
+
+        var result = _dbSet.Update(entityModel);
+
+        return MapToDomainModel(result.Entity);
+    }
 
     protected virtual TDomainModel? MapToDomainModel(TEntityModel? entityModel) =>
         entityModel is null ? null : _autoMapper.Map<TEntityModel?, TDomainModel?>(entityModel);

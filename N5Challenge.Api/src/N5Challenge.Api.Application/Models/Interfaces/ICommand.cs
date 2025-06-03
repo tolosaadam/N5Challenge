@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Application.Interfaces;
+namespace N5Challenge.Api.Application.Models.Interfaces;
 
 public interface ICommand
 {
