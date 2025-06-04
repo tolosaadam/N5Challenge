@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include=".EndpointsDefinitions\Endpoints.cs" />
-    <Compile Include=".EndpointsDefinitions\PermissionAppExtensions.cs" />
+    <Compile Include=".EndpointsDefinitions\PermissionType\Endpoints.cs" />
+    <Compile Include=".EndpointsDefinitions\PermissionType\PermissionTypeAppExtensions.cs" />
+    <Compile Include=".EndpointsDefinitions\Permission\Endpoints.cs" />
+    <Compile Include=".EndpointsDefinitions\Permission\PermissionAppExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

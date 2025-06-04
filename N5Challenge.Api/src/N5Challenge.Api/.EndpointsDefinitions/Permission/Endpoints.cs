@@ -7,7 +7,7 @@ using N5Challenge.Api.Application.Permission.Commands.UpdatePartial;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using System.Numerics;
 
-namespace N5Challenge.Api.EndpointsDefinitions;
+namespace N5Challenge.Api.EndpointsDefinitions.Permission;
 
 public class Endpoints
 {

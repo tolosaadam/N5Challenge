@@ -1,4 +1,4 @@
-﻿namespace N5Challenge.Api.EndpointsDefinitions;
+﻿namespace N5Challenge.Api.EndpointsDefinitions.Permission;
 
 public static class EndPointDefinition
 {
@@ -8,7 +8,7 @@ public static class EndPointDefinition
             .Produces<IEnumerable<Responses.Permission.PermissionResponse>>(StatusCodes.Status200OK)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .WithName("GetAll")
+            .WithName("Get All Permission")
             .WithTags("Permission-Queries")
             .AllowAnonymous()
             .WithOpenApi();
@@ -17,7 +17,7 @@ public static class EndPointDefinition
             .Produces<int>(StatusCodes.Status201Created)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .WithName("Create")
+            .WithName("Create Permission")
             .WithTags("Permission-Commands")
             .AllowAnonymous()
             .WithOpenApi();
@@ -26,7 +26,7 @@ public static class EndPointDefinition
             .Produces(StatusCodes.Status204NoContent)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .WithName("UpdatePartial")
+            .WithName("Update Partial Permission")
             .WithTags("Permission-Commands")
             .AllowAnonymous()
             .WithOpenApi();
@@ -35,7 +35,7 @@ public static class EndPointDefinition
             .Produces(StatusCodes.Status204NoContent)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .WithName("Update")
+            .WithName("Update Permission")
             .WithTags("Permission-Commands")
             .AllowAnonymous()
             .WithOpenApi();

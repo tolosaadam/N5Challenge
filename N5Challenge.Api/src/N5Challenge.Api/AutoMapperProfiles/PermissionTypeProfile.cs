@@ -8,5 +8,8 @@ public class PermissionTypeProfile : Profile
     {
         _ = CreateMap<Domain.PermissionType, Infraestructure.SQL.Entities.PermissionTypeDB>()
             .ReverseMap();
+
+        _ = CreateMap<Domain.PermissionType,
+            Responses.PermissionType.PermissionTypeResponse>();
     }
 }

@@ -7,7 +7,6 @@ using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Commands.Create;
-using N5Challenge.Api.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,7 +129,7 @@ public class CreatePermissionCommandHandlerTests
 
         _pTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
-            .ReturnsAsync((PermissionType?)null);
+            .ReturnsAsync((Domain.PermissionType?)null);
 
         Func<Task> act = async () => await _handler.Handle(command, cancellationToken);
 

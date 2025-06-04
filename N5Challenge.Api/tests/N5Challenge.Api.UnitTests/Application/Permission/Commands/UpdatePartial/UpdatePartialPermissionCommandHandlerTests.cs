@@ -60,7 +60,7 @@ public class UpdatePartialPermissionCommandHandlerTests
             PermissionTypeId = 1
         };
 
-        var pType = new PermissionType
+        var pType = new Domain.PermissionType
         {
             Id = 1
         };
@@ -140,7 +140,7 @@ public class UpdatePartialPermissionCommandHandlerTests
 
         _pTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken))
-            .ReturnsAsync((PermissionType?)null);
+            .ReturnsAsync((Domain.PermissionType?)null);
 
         Func<Task> act = async () => await _handler.Handle(command, cancellationToken);
 
@@ -158,7 +158,7 @@ public class UpdatePartialPermissionCommandHandlerTests
 
         _pTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken))
-            .ReturnsAsync((PermissionType?)null);
+            .ReturnsAsync((Domain.PermissionType?)null);
 
         Func<Task> act = async () => await _handler.Handle(command, cancellationToken);
 

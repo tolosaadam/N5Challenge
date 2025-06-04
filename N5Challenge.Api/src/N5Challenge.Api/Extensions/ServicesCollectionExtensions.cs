@@ -102,4 +102,19 @@ public static class ServicesCollectionExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddCorsSettings(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigins", policy =>
+            {
+                policy.WithOrigins("*")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
+        return services;
+    }
 }
