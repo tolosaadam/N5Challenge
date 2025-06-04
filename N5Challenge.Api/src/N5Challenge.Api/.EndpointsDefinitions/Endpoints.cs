@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Application.Permission.Commands.Update;
+using N5Challenge.Api.Application.Permission.Commands.UpdatePartial;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using System.Numerics;
 
@@ -30,6 +31,18 @@ public class Endpoints
         var command = autoMapper.Map<CreatePermissionCommand>(request);
         var result = await mediator.Send(command, cancellationToken);
         return Results.Created($"/api/permissions/{result}", new { id = result });
+    }
+
+    internal static async Task<IResult> UpdatePartial(
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper autoMapper,
+        int id,
+        Requests.Permission.PermissionUpdatePartialRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = autoMapper.Map<UpdatePartialPermissionCommand>((request, id));
+        await mediator.Send(command, cancellationToken);
+        return Results.NoContent();
     }
 
     internal static async Task<IResult> Update(

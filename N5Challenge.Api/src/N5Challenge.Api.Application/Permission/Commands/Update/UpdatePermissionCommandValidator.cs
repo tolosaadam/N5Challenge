@@ -18,5 +18,33 @@ public class UpdatePermissionCommandValidator : AbstractValidator<UpdatePermissi
                     .WithMessage(ValidationMessagesConstants.Empty)
                 .NotNull()
                     .WithMessage(ValidationMessagesConstants.Null);
+
+        RuleFor(m => m.EmployeeLastName)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage(ValidationMessagesConstants.Empty)
+                .NotNull()
+                    .WithMessage(ValidationMessagesConstants.Null);
+
+        RuleFor(m => m.EmployeeFirstName)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage(ValidationMessagesConstants.Empty)
+                .NotNull()
+                    .WithMessage(ValidationMessagesConstants.Null);
+
+        RuleFor(m => m.PermissionTypeId)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage(ValidationMessagesConstants.Empty)
+                .NotNull()
+                    .WithMessage(ValidationMessagesConstants.Null);
+
+        RuleFor(m => m.Date)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage(ValidationMessagesConstants.Empty)
+                .NotNull()
+                    .WithMessage(ValidationMessagesConstants.Null);
     }
 }

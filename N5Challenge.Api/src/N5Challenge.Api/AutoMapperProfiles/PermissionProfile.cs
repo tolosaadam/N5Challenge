@@ -7,6 +7,8 @@ public class PermissionProfile : Profile
 {
     public PermissionProfile()
     {
+        #region Create
+
         _ = CreateMap<Requests.Permission.PermissionCreateRequest,
             Application.Permission.Commands.Create.CreatePermissionCommand>()
             .ConstructUsing(src =>
@@ -14,6 +16,13 @@ public class PermissionProfile : Profile
                 src.EmployeeFirstName,
                 src.EmployeeLastName,
                 src.PermissionTypeId));
+
+        _ = CreateMap<Application.Permission.Commands.Create.CreatePermissionCommand,
+            Domain.Permission>();
+
+        #endregion
+
+        #region Update
 
         _ = CreateMap<(Requests.Permission.PermissionUpdateRequest request, int id),
             Application.Permission.Commands.Update.UpdatePermissionCommand>()
@@ -25,10 +34,25 @@ public class PermissionProfile : Profile
                 src.request.PermissionTypeId,
                 src.request.Date));
 
-        _ = CreateMap<Application.Permission.Commands.Create.CreatePermissionCommand,
+        _ = CreateMap<Application.Permission.Commands.Update.UpdatePermissionCommand,
             Domain.Permission>();
 
-        _ = CreateMap<Application.Permission.Commands.Update.UpdatePermissionCommand, Domain.Permission>()
+        #endregion
+
+        #region UpdatePartial
+
+        _ = CreateMap<(Requests.Permission.PermissionUpdatePartialRequest request, int id),
+            Application.Permission.Commands.UpdatePartial.UpdatePartialPermissionCommand>()
+            .ConstructUsing(src =>
+            new Application.Permission.Commands.UpdatePartial.UpdatePartialPermissionCommand(
+                src.id,
+                src.request.EmployeeFirstName,
+                src.request.EmployeeLastName,
+                src.request.PermissionTypeId,
+                src.request.Date));
+
+        _ = CreateMap<Application.Permission.Commands.UpdatePartial.UpdatePartialPermissionCommand,
+            Domain.Permission>()
             .ForMember(dest => dest.EmployeeFirstName,
                 opt => opt.Condition((src, dest, srcMember, destMember) => !string.IsNullOrEmpty(srcMember)))
             .ForMember(dest => dest.EmployeeLastName,
@@ -38,9 +62,17 @@ public class PermissionProfile : Profile
             .ForMember(dest => dest.PermissionTypeId,
                 opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != 0));
 
+        #endregion
+
+        #region Repository
+
         _ = CreateMap<Domain.Permission,
             Infraestructure.SQL.Entities.PermissionDB>()
             .ReverseMap();
+
+        #endregion
+
+        #region ElasticSearch
 
         _ = CreateMap<Domain.Permission,
             IndexablePermission>()
@@ -55,7 +87,13 @@ public class PermissionProfile : Profile
                 PermissionTypeId = src.permission.PermissionTypeId
             });
 
+        #endregion
+
+        #region Responses
+
         _ = CreateMap<Domain.Permission,
             Responses.Permission.PermissionResponse>();
+
+        #endregion
     }
 }

@@ -22,7 +22,16 @@ public static class EndPointDefinition
             .AllowAnonymous()
             .WithOpenApi();
 
-        app.MapPatch("/permissions/{id}", Endpoints.Update)
+        app.MapPatch("/permissions/{id}", Endpoints.UpdatePartial)
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithName("UpdatePartial")
+            .WithTags("Permission-Commands")
+            .AllowAnonymous()
+            .WithOpenApi();
+
+        app.MapPut("/permissions/{id}", Endpoints.Update)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
