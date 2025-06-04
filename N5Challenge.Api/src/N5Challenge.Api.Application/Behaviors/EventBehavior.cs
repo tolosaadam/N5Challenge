@@ -15,11 +15,6 @@ public class EventBehavior<TRequest, TResponse>(IKafkaProducer producer) : IPipe
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if (request is not IPublishEvent)
-        {
-            return await next(cancellationToken);
-        }
-
         await _producer.SendMessageAsync(request.Topic, request.Operation, cancellationToken);
 
         return await next(cancellationToken);

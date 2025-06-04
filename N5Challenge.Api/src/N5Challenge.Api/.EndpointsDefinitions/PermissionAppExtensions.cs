@@ -22,7 +22,7 @@ public static class EndPointDefinition
             .AllowAnonymous()
             .WithOpenApi();
 
-        app.MapPost("/permissions/{id}", Endpoints.Update)
+        app.MapPatch("/permissions/{id}", Endpoints.Update)
             .Produces(StatusCodes.Status204NoContent)
             .ProducesValidationProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status500InternalServerError)

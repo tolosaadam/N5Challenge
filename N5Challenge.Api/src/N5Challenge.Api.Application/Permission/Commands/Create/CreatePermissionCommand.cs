@@ -18,7 +18,7 @@ namespace N5Challenge.Api.Application.Permission.Commands.Create;
 public record CreatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
-    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent
+    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent , IValidate
 {
     public OperationEnum Operation => OperationEnum.request;
     public string Topic => "permission";

@@ -28,8 +28,15 @@ public class PermissionProfile : Profile
         _ = CreateMap<Application.Permission.Commands.Create.CreatePermissionCommand,
             Domain.Permission>();
 
-        _ = CreateMap<Application.Permission.Commands.Update.UpdatePermissionCommand,
-            Domain.Permission>();
+        _ = CreateMap<Application.Permission.Commands.Update.UpdatePermissionCommand, Domain.Permission>()
+            .ForMember(dest => dest.EmployeeFirstName,
+                opt => opt.Condition((src, dest, srcMember, destMember) => !string.IsNullOrEmpty(srcMember)))
+            .ForMember(dest => dest.EmployeeLastName,
+                opt => opt.Condition((src, dest, srcMember, destMember) => !string.IsNullOrEmpty(srcMember)))
+            .ForMember(dest => dest.Date,
+                opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != default(DateTime)))
+            .ForMember(dest => dest.PermissionTypeId,
+                opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != 0));
 
         _ = CreateMap<Domain.Permission,
             Infraestructure.SQL.Entities.PermissionDB>()
@@ -39,13 +46,14 @@ public class PermissionProfile : Profile
             IndexablePermission>()
             .ForMember(src => src.Id, opt => opt.MapFrom(opt => opt.Id.ToString()));
 
-        _ = CreateMap<(Domain.Permission permission, int id),
-            IndexablePermission>()
-            .ForMember(src => src.Id, opt => opt.MapFrom(opt => opt.id.ToString()))
-            .ForMember(src => src.EmployeeLastName, opt => opt.MapFrom(opt => opt.permission.EmployeeLastName))
-            .ForMember(src => src.EmployeeFirstName, opt => opt.MapFrom(opt => opt.permission.EmployeeFirstName))
-            .ForMember(src => src.Date, opt => opt.MapFrom(opt => opt.permission.Date))
-            .ForMember(src => src.PermissionTypeId, opt => opt.MapFrom(opt => opt.permission.PermissionTypeId));
+        _ = CreateMap<(Domain.Permission permission, int id), IndexablePermission>()
+            .ConstructUsing(src => new IndexablePermission(src.id.ToString())
+            {
+                EmployeeFirstName = src.permission.EmployeeFirstName,
+                EmployeeLastName = src.permission.EmployeeLastName,
+                Date = src.permission.Date,
+                PermissionTypeId = src.permission.PermissionTypeId
+            });
 
         _ = CreateMap<Domain.Permission,
             Responses.Permission.PermissionResponse>();

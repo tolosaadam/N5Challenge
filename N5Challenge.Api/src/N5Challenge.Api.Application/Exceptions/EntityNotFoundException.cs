@@ -8,4 +8,6 @@ namespace N5Challenge.Api.Application.Exceptions;
 
 public class EntityNotFoundException(string entityName, object key) : Exception($"{entityName} with ID '{key}' was not found.")
 {
+    public string? EntityName { get; } = entityName;
+    public object? Key { get; } = key;
 }

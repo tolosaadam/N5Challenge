@@ -11,6 +11,6 @@ public class IndexablePermission(string id) : IndexableEntity(id)
 {
     public string? EmployeeFirstName { get; set; }
     public string? EmployeeLastName { get; set; }
-    public DateTime? Date { get; set; }
+    public DateTime Date { get; set; }
     public int PermissionTypeId { get; set; }
 }

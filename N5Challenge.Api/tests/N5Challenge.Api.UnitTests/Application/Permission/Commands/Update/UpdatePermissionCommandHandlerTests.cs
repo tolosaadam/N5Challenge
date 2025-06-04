@@ -72,7 +72,7 @@ public class UpdatePermissionCommandHandlerTests
             .ReturnsAsync(permission);
 
         _pTypeRepositoryMock
-            .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
+            .Setup(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken))
             .ReturnsAsync(pType);
 
         _autoMapperMock
@@ -98,7 +98,7 @@ public class UpdatePermissionCommandHandlerTests
         _pRepositoryMock.Verify(r => r.GetByIdAsync(command.Id, cancellationToken), Times.Once,
             "Should retrieve existing permission by ID");
 
-        _pTypeRepositoryMock.Verify(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken), Times.Once,
+        _pTypeRepositoryMock.Verify(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken), Times.Once,
             "Should retrieve permission type by ID");
 
         _autoMapperMock.Verify(m => m.Map<Domain.Permission>(command), Times.Once,
@@ -139,7 +139,7 @@ public class UpdatePermissionCommandHandlerTests
             .ReturnsAsync(permission);
 
         _pTypeRepositoryMock
-            .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
+            .Setup(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken))
             .ReturnsAsync((PermissionType?)null);
 
         Func<Task> act = async () => await _handler.Handle(command, cancellationToken);
@@ -157,7 +157,7 @@ public class UpdatePermissionCommandHandlerTests
         var cancellationToken = CancellationToken.None;
 
         _pTypeRepositoryMock
-            .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
+            .Setup(r => r.GetByIdAsync(command.PermissionTypeId.Value, cancellationToken))
             .ReturnsAsync((PermissionType?)null);
 
         Func<Task> act = async () => await _handler.Handle(command, cancellationToken);

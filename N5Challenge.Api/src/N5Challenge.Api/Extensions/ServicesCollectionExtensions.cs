@@ -28,8 +28,7 @@ public static class ServicesCollectionExtensions
 
     public static IServiceCollection AddValidatorSettings(this IServiceCollection services)
     {
-        services.AddScoped<CreatePermissionCommandValidator>();
-        services.AddScoped<UpdatePermissionCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 
         return services;
     }
@@ -71,8 +70,9 @@ public static class ServicesCollectionExtensions
 
     public static IServiceCollection AddBehaviorSettings(this IServiceCollection services)
     {
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(EventBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
 
         return services;
     }

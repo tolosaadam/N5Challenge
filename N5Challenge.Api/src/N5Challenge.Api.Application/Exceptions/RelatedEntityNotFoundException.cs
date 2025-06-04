@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Exceptions;
 
-public class RelatedEntityNotFoundException(string entityName, string relatedEntityName, object relatedKey) : Exception($"Entity '{entityName}' refers to non-existent {relatedEntityName} with ID '{relatedKey}'.")
+public sealed class RelatedEntityNotFoundException(string entityName, string relatedEntityName, object relatedKey)
+    : Exception($"Entity '{entityName}' refers to non-existent {relatedEntityName} with ID '{relatedKey}'.")
 {
+    public string? EntityName { get; } = entityName;
+    public string? RelatedEntityName { get; } = relatedEntityName;
+    public object? RelatedKey { get; } = relatedKey;
 }
