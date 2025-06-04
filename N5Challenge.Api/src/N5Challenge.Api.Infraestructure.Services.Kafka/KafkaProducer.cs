@@ -42,11 +42,11 @@ public class KafkaProducer : IKafkaProducer
             },
             cancellationToken);
 
-            _logger.LogInformation("Success message send. Entity: {@Topic}, Index: {Operation}", topic, operation);
+            _logger.LogInformation("Success message send. Topic: {@Topic}, Operation: {Operation}", topic, operation);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending message. Entity: {@Topic}, Index: {Operation}", topic, operation);
+            _logger.LogError(ex, "Error sending message. Topic: {@Topic}, Operation: {Operation}", topic, operation);
         }
     }
 }

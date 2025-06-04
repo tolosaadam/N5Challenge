@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Exceptions;
 
-public class NotFoundException(string entityName, object key) : Exception($"{entityName} with ID '{key}' was not found.")
+public class EntityNotFoundException(string entityName, object key) : Exception($"{entityName} with ID '{key}' was not found.")
 {
 }
