@@ -1,5 +1,4 @@
-﻿using N5Challenge.Api.Application.Interfaces.Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +10,6 @@ public class IndexablePermission(string id) : IndexableEntity(id)
 {
     public string? EmployeeFirstName { get; set; }
     public string? EmployeeLastName { get; set; }
-    public DateTime? Date { get; set; }
+    public DateTime Date { get; set; }
     public int PermissionTypeId { get; set; }
 }

@@ -13,12 +13,7 @@ public class TransactionBehavior<TRequest, TResponse>(IUnitOfWork unitOfWork) : 
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-    {
-        if (request is not ICommand)
-        {
-            return await next(cancellationToken);
-        }
-            
+    {           
         try
         {
             await _unitOfWork.BeginTransactionAsync(cancellationToken);

@@ -13,13 +13,16 @@ namespace N5Challenge.Api.UnitTests.Application.Permission.Commands.Update;
 public class UpdatePermissionCommandValidatorTests
 {
     [TestMethod]
-    [DataRow(1, true)]
-    [DataRow(0, false)]
-    public async Task ValidatorTest(int id, bool isValid)
+    [DataRow(1, "xxxx", "xxxx", 1, true)]
+    [DataRow(0, "xxxx", "xxxx", 1, false)]
+    [DataRow(1, "", "xxxx", 1, false)]
+    [DataRow(1, "xxxx", null, 1, false)]
+    [DataRow(1, "xxxx", "xxxx", 0, false)]
+    public async Task ValidatorTest(int id, string firstName, string lastName, int pTypeId, bool isValid)
     {
         // Arrange
         var validator = new UpdatePermissionCommandValidator();
-        var request = new UpdatePermissionCommand(id, "Adam", "Tolosa", 1, new DateTime(default));
+        var request = new UpdatePermissionCommand(id, firstName, lastName, pTypeId, DateTime.UtcNow);
 
         // Act
         var result = await validator.ValidateAsync(request);
@@ -27,6 +30,6 @@ public class UpdatePermissionCommandValidatorTests
         // Assert
         result.IsValid
             .Should()
-            .Be(isValid, $"because Id='{id}'");
+            .Be(isValid, $"because FirstName='{firstName}', LastName='{lastName}', and PermissionTypeId={pTypeId}");
     }
 }

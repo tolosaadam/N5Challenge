@@ -4,12 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Domain.Enums;
+namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public enum OperationEnum
+public interface IValidate
 {
-    modify,
-    modify_partial,
-    request,
-    get
 }

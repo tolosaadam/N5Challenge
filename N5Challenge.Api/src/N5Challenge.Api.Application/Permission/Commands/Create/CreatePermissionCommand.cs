@@ -18,7 +18,7 @@ namespace N5Challenge.Api.Application.Permission.Commands.Create;
 public record CreatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
-    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent
+    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.request;
     public string Topic => "permission";
@@ -27,7 +27,7 @@ public record CreatePermissionCommand(
 public class CreatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch) 
+    IElasticSearch elasticSearch)
     : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
