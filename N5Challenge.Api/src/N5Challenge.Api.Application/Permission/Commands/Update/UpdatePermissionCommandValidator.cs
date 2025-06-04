@@ -14,8 +14,6 @@ public class UpdatePermissionCommandValidator : AbstractValidator<UpdatePermissi
     {
         RuleFor(m => m.Id)
                 .Cascade(CascadeMode.Stop)
-                .GreaterThan(0)
-                    .WithMessage(ValidationMessagesConstants.GreaterThanZero)
                 .NotEmpty()
                     .WithMessage(ValidationMessagesConstants.Empty)
                 .NotNull()

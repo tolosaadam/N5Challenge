@@ -4,7 +4,6 @@ using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
-using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -45,7 +44,7 @@ public class UpdatePermissionCommandHandler(
 
         if (pEntity is null)
         {
-            throw new NotFoundException(nameof(Domain.Permission), request.Id);
+            throw new EntityNotFoundException(nameof(Domain.Permission), request.Id);
         }
 
         var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();

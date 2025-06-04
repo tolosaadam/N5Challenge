@@ -38,7 +38,7 @@ app.UseExceptionHandler(errorApp =>
     {
         var exceptionHandler = context.Features.Get<IExceptionHandlerPathFeature>()?.Error;
 
-        if (exceptionHandler is NotFoundException)
+        if (exceptionHandler is EntityNotFoundException)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new { error = exceptionHandler.Message });
