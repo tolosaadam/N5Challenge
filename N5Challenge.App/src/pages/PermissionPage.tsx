@@ -30,7 +30,6 @@ const PermissionPage = () => {
   if (isErrorPermissions) errorMessage = `Error cargando permisos: ${errorPermissions?.message}`;
   else if (isErrorPermissionTypes) errorMessage = `Error cargando tipos de permiso: ${errorPermissionTypes?.message}`;
 
-  // Estados para el modal etc
   const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,7 +39,6 @@ const PermissionPage = () => {
   };
 
   const handleCloseModal = () => {
-    setSelectedPermission(null);
     setIsModalOpen(false);
   };
 
@@ -52,6 +50,7 @@ const PermissionPage = () => {
         <Typography color="error">{errorMessage}</Typography>
       ) : (
         <>
+
           <Typography variant="h4" gutterBottom>
             Permisos
           </Typography>
@@ -73,6 +72,7 @@ const PermissionPage = () => {
             permission={selectedPermission}
             permissionTypes={permissionTypes ?? []}
           />
+
         </>
       )}
     </Container>

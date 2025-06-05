@@ -49,7 +49,6 @@ const PermissionForm = ({ open, onClose, permission, permissionTypes }: Props) =
     },
   });
 
-  // Cuando cambia permission o permissionTypes, resetear el form con valores nuevos
   useEffect(() => {
     if (permission) {
       reset({
@@ -69,8 +68,8 @@ const PermissionForm = ({ open, onClose, permission, permissionTypes }: Props) =
   }, [permission, permissionTypes, reset]);
 
   const handleClose = () => {
-    reset();
     onClose();
+    reset();
   }
 
   const onSubmit = async (data: FormValues) => {
@@ -83,6 +82,7 @@ const PermissionForm = ({ open, onClose, permission, permissionTypes }: Props) =
       };
 
       updatePermission({ id: permission!.id, newPermission: payload });
+
     } else {
       const payload: PermissionCreateRequest = {
         employeeFirstName: data.employeeFirstName,

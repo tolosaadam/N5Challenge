@@ -4,7 +4,7 @@ import { getAllPermissionType } from '../services/permissionType.service';
 
 export const useGetAllPermissionType = () => {
   return useQuery<PermissionType[], Error>({
-    queryKey: ['permissionTypes'],
+    queryKey: ['permission-types'],
     queryFn: getAllPermissionType,
     staleTime: 1 * 60 * 1000,
     refetchOnWindowFocus: false

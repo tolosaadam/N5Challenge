@@ -10,6 +10,11 @@ services:
       MSSQL_DBNAME: N5ChallengeDb
     volumes:
       - sqlserverdata:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 123456aA_! -Q 'SELECT 1'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend
 
@@ -24,7 +29,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=N5ChallengeDb;User=sa;Password=123456aA_!;Encrypt=False;TrustServerCertificate=True
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     networks:
       - backend
 
@@ -99,8 +105,6 @@ services:
       - backend
     environment:
       KAFKA_BROKER_ID: 1
-
-      # Conexión a Zookeeper
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
       # Mapear listeners internos y externos
@@ -111,20 +115,16 @@ services:
 
       # Lo que Kafka "anuncia" a los clientes, interno y externo
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
-
-      # Listener para comunicación entre brokers (solo uno acá, pero se define igual)
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-
-      # Replicación de tópicos internos
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-      # Auto crear tópicos
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   app:
     build:
       context: ./N5Challenge.App
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: http://localhost:8080/
     container_name: n5challenge-app
     ports:
       - "3000:80"
