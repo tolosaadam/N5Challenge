@@ -121,6 +121,18 @@ services:
       # Auto crear tópicos
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
+  app:
+    build:
+      context: ./N5Challenge.App
+      dockerfile: Dockerfile
+    container_name: n5challenge-app
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - backend
+
 volumes:
   sqlserverdata:
   elasticsearch-data:
