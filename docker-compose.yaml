@@ -74,10 +74,18 @@ services:
     container_name: zookeeper
     ports:
       - "2181:2181"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - kafka-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -96,7 +104,8 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     ports:
       - "9092:9092"       # Puerto externo para acceder desde localhost
       - "29092:29092"     # Puerto interno para comunicación dentro de docker
@@ -118,6 +127,8 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
 
   app:
     build:
@@ -136,6 +147,9 @@ services:
 volumes:
   sqlserverdata:
   elasticsearch-data:
+  kafka-data:
+  zookeeper-data:
+  zookeeper-log:
 
 networks:
   kafka-net:
