@@ -52,16 +52,16 @@ public class CreatePermissionCommandHandlerTests
 
         var cancellationToken = CancellationToken.None;
 
+        var pType = new Domain.PermissionType
+        {
+            Id = 1
+        };
+
         var permission = new Domain.Permission
         {
             EmployeeFirstName = "Adam",
             EmployeeLastName = "Tolosa",
-            PermissionTypeId = 1
-        };
-
-        var pType = new Domain.PermissionType
-        {
-            Id = 1
+            Type = pType
         };
 
         static int idFunc() => 1;
@@ -100,7 +100,7 @@ public class CreatePermissionCommandHandlerTests
             It.Is<Domain.Permission>(p =>
                 p.EmployeeFirstName == permission.EmployeeFirstName &&
                 p.EmployeeLastName == permission.EmployeeLastName &&
-                p.PermissionTypeId == permission.PermissionTypeId),
+                p.Type == permission.Type),
             cancellationToken), Times.Once, "Permission should be added once");
 
 

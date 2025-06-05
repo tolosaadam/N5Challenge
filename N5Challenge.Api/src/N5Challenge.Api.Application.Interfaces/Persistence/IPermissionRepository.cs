@@ -8,4 +8,5 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IPermissionRepository : IEntityRepository<Domain.Permission, int>
 {
+    Task<IEnumerable<Domain.Permission>> GetAllAsync(bool includeType, CancellationToken cancellationToken = default);
 }

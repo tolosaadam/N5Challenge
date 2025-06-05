@@ -53,16 +53,16 @@ public class UpdatePermissionCommandHandlerTests
 
         var cancellationToken = CancellationToken.None;
 
+        var pType = new Domain.PermissionType
+        {
+            Id = 1
+        };
+
         var permission = new Domain.Permission
         {
             EmployeeFirstName = "Adam",
             EmployeeLastName = "Tolosa",
-            PermissionTypeId = 1
-        };
-
-        var pType = new Domain.PermissionType
-        {
-            Id = 1
+            Type = pType
         };
 
         var indexablePermission = new IndexablePermission("1");
@@ -107,7 +107,7 @@ public class UpdatePermissionCommandHandlerTests
         _pRepositoryMock.Verify(r => r.Update(It.Is<Domain.Permission>(p =>
             p.EmployeeFirstName == permission.EmployeeFirstName &&
             p.EmployeeLastName == permission.EmployeeLastName &&
-            p.PermissionTypeId == permission.PermissionTypeId)), Times.Once,
+            p.Type == permission.Type)), Times.Once,
             "Should update permission with correct values");
 
         _autoMapperMock.Verify(m => m.Map<IndexablePermission>(permission), Times.Once,
@@ -127,11 +127,16 @@ public class UpdatePermissionCommandHandlerTests
 
         var cancellationToken = CancellationToken.None;
 
+        var pType = new Domain.PermissionType
+        {
+            Id = 1
+        };
+
         var permission = new Domain.Permission
         {
             EmployeeFirstName = "Adam",
             EmployeeLastName = "Tolosa",
-            PermissionTypeId = 1
+            Type = pType
         };
 
         _pRepositoryMock

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Domain;
 
 namespace N5Challenge.Api.AutoMapperProfiles;
 
@@ -18,7 +19,8 @@ public class PermissionProfile : Profile
                 src.PermissionTypeId));
 
         _ = CreateMap<Application.Permission.Commands.Create.CreatePermissionCommand,
-            Domain.Permission>();
+            Domain.Permission>()
+            .ForMember(dest => dest.Type, opt => opt.Ignore());
 
         #endregion
 
@@ -35,7 +37,8 @@ public class PermissionProfile : Profile
                 src.request.Date));
 
         _ = CreateMap<Application.Permission.Commands.Update.UpdatePermissionCommand,
-            Domain.Permission>();
+            Domain.Permission>()
+            .ForMember(dest => dest.Type, opt => opt.Ignore());
 
         #endregion
 
@@ -60,7 +63,8 @@ public class PermissionProfile : Profile
             .ForMember(dest => dest.Date,
                 opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != default(DateTime)))
             .ForMember(dest => dest.PermissionTypeId,
-                opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != 0));
+                opt => opt.Condition((src, dest, srcMember, destMember) => srcMember != 0))
+            .ForMember(dest => dest.Type, opt => opt.Ignore());
 
         #endregion
 
@@ -68,7 +72,10 @@ public class PermissionProfile : Profile
 
         _ = CreateMap<Domain.Permission,
             Infraestructure.SQL.Entities.PermissionDB>()
-            .ReverseMap();
+            .ForMember(dest => dest.Type, opt => opt.Ignore());
+
+        _ = CreateMap<Infraestructure.SQL.Entities.PermissionDB,
+           Domain.Permission>();
 
         #endregion
 
