@@ -1,110 +1,94 @@
 # 🔐 Permissions API & Frontend (React + .NET 8)
 
-Una solución fullstack que incluye una Web API en .NET 8 y una aplicación frontend en React con TypeScript para gestionar permisos a través de un CRUD.
-La API integra Kafka para eventos, Elasticsearch para persistencia, y optimiza la experiencia del usuario con caché y actualizaciones optimistas.
-
-
----
-
-
-### ⚙️ Funcionalidad principal
-
-- Visualizar lista de permisos  
-- Crear nuevos permisos  
-- Editar permisos existentes  
-
+A fullstack solution including a .NET 8 Web API and a React application with TypeScript to manage permissions through a CRUD.
+The API integrates Kafka for events, Elasticsearch for persistence, and optimizes user experience with caching and optimistic updates.
 
 ---
 
+### ⚙️ Main functionality
 
-### 🚀 Características destacadas
-
-- Cada operación (GET, POST, PUT) emite un evento en Kafka con un GUID único y el nombre de la entidad como tópico (ejemplo: `permission`, `permission-type`).  
-- Al finalizar una operación, el modelo completo de la entidad se persiste en Elasticsearch.  
-- La aplicación frontend utiliza React Query para manejo de caché y actualizaciones optimistas para mejorar la UX.  
-- Patrones arquitectónicos usados: CQRS, Unit of Work (con transacciones), Repository, Pipeline Behaviors.  
-- Uso de AutoMapper, inyección de dependencias y middlewares personalizados en la API.  
-- Tests unitarios implementados con MSTest en la Web API.
-
+- View list of permissions  
+- Create new permissions  
+- Edit existing permissions  
 
 ---
 
+### 🚀 Key features
 
-### 🛠️ Tecnologías utilizadas
+- Each operation (GET, POST, PUT) emits an event in Kafka with a unique GUID and the entity name as topic (e.g., `permission`, `permission-type`).  
+- At the end of each operation, the full entity model is persisted in Elasticsearch.  
+- The frontend app uses React Query for state and cache management, with optimistic updates to improve UX.  
+- Architectural patterns used: CQRS, Unit of Work (with transactions), Repository, Pipeline Behaviors.  
+- Uses AutoMapper, dependency injection, and custom middlewares in the API.  
+- Unit tests implemented with MSTest on the Web API.  
+
+---
+
+### 🛠️ Technologies used
 
 #### Backend
-- .NET 8 (Minimal API)
-- Repository Pattern + Generic Repository
-- Unit of Work (con transacciones)
-- AutoMapper
-- CQRS (con Pipeline Behaviors)
-- Inyección de dependencias
-- Middlewares personalizados
-- Kafka (producción de eventos)
-- Elasticsearch (persistencia de entidades)
-- Zookeeper (dependencia de Kafka)
-- SQL Server (base de datos relacional)
-- Unit tests con MSTest
+- .NET 8 (Minimal API)  
+- Repository Pattern + Generic Repository  
+- Unit of Work (with transactions)  
+- AutoMapper  
+- CQRS (with Pipeline Behaviors)  
+- Dependency Injection  
+- Custom Middlewares  
+- Kafka (event production)  
+- Elasticsearch (entity persistence)  
+- Zookeeper (Kafka dependency)  
+- SQL Server (relational database)  
+- Unit tests with MSTest  
 
 #### Frontend (React + TypeScript)
-- React 18 + TypeScript
-- React Query (manejo de estado y caché)
-- React Hook Form (formularios)
-- Material UI (componentes de interfaz)
-- Axios (requests HTTP)
-- Optimistic Update (para mejorar UX en actualizaciones)
-- Invalidación de cacheKeys para creación
-  
+- React 18 + TypeScript  
+- React Query (state and cache management)  
+- React Hook Form (forms)  
+- Material UI (UI components)  
+- Axios (HTTP requests)  
+- Optimistic Update (to improve UX on updates)  
+- Cache key invalidation for creation  
 
 ---
 
+### 📦 Docker Compose and ports
 
-### 📦 Docker Compose y puertos
+The project includes a `docker-compose.yml` file that brings up the following services:
 
-El proyecto incluye un archivo `docker-compose.yml` que levanta los siguientes servicios:
-
-| Servicio       | Puerto interno | Descripción                         |
-|----------------|----------------|-----------------------------------|
-| API (.NET)     | 8080           | Web API para gestionar permisos   |
-| React App      | 3000           | Aplicación frontend                |
-| SQL Server     | 1433           | Base de datos                     |
-| Zookeeper      | 2181           | Coordinación Kafka                |
-| Kafka          | 9092           | Broker Kafka                     |
-| Kafka UI       | 9090           | Interfaz web para administración Kafka |
-| Elasticsearch  | 9200           | Almacenamiento y búsqueda         |
-| Kibana         | 5601           | Visualización y monitoreo de Elasticsearch |
-
+| Service        | Internal Port | Description                        |
+|----------------|---------------|----------------------------------|
+| API (.NET)     | 8080          | Web API to manage permissions    |
+| React App      | 3000          | Frontend application              |
+| SQL Server     | 1433          | Database                         |
+| Zookeeper      | 2181          | Kafka coordination               |
+| Kafka          | 9092          | Kafka broker                    |
+| Kafka UI       | 9090          | Web interface for Kafka admin   |
+| Elasticsearch  | 9200          | Storage and search               |
+| Kibana         | 5601          | Elasticsearch monitoring & visualization |
 
 ---
 
+### 🔗 Service dependencies
 
-### 🔗 Dependencias entre servicios
-
-- Kafka depende de Zookeeper para coordinación.  
-- Kafka UI depende de Kafka para mostrar la información del cluster.  
-- La API depende de Kafka, SQL Server y Elasticsearch para su funcionamiento completo.
-- 
+- Kafka depends on Zookeeper for coordination.  
+- Kafka UI depends on Kafka to show cluster info.  
+- The API depends on Kafka, SQL Server, and Elasticsearch to fully operate.
 
 ---
 
+### ▶️ How to run the project
 
-### ▶️ Cómo correr el proyecto
-
-Desde la raíz del proyecto, ejecutar el siguiente comando para levantar todos los servicios y la aplicación completa: 'docker-compose up'.
-
+From the root of the project, run the following command to start all services and the full application: `docker-compose up`.
 
 ---
-
 
 ### 🧪 Testing
 
-La Web API cuenta con tests unitarios escritos en **MSTest**.
-
+The Web API includes unit tests written with **MSTest**.
 
 ---
 
-
-### 👤 Autor
+### 👤 Author
 
 **Adam Ezequiel Tolosa**  
-📧 [LinkedIn](https://www.linkedin.com/in/adam-ezequiel-tolosa/).
+📧 [LinkedIn](https://www.linkedin.com/in/adam-ezequiel-tolosa/)
