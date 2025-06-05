@@ -63,7 +63,7 @@ La API integra Kafka para eventos, Elasticsearch para persistencia, y optimiza l
 
 El proyecto incluye un archivo `docker-compose.yml` que levanta los siguientes servicios:
 
-| Servicio       | Puerto externo | Descripción                         |
+| Servicio       | Puerto interno | Descripción                         |
 |----------------|----------------|-----------------------------------|
 | API (.NET)     | 8080           | Web API para gestionar permisos   |
 | React App      | 3000           | Aplicación frontend                |
