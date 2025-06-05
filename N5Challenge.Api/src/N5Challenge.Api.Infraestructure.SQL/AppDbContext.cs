@@ -38,8 +38,9 @@ public class AppDbContext : DbContext
         });
 
         modelBuilder.Entity<PermissionTypeDB>().HasData(
-        new PermissionTypeDB { Id = 1, Description = "unknown 1" },
-        new PermissionTypeDB { Id = 2, Description = "unknown 2" });
+        new PermissionTypeDB { Id = 1, Description = "Permiso 1" },
+        new PermissionTypeDB { Id = 2, Description = "Permiso 2" },
+        new PermissionTypeDB { Id = 3, Description = "Permiso 3" });
 
         modelBuilder.Entity<PermissionDB>().HasData(
             new PermissionDB
@@ -52,8 +53,8 @@ public class AppDbContext : DbContext
             new PermissionDB
             {
                 Id = 2,
-                EmployeeLastName = "Spinelli",
-                EmployeeFirstName = "Berenice",
+                EmployeeLastName = "Adam",
+                EmployeeFirstName = "Tolosa",
                 PermissionTypeId = 2
             });
     }
