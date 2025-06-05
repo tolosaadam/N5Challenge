@@ -11,7 +11,7 @@ services:
     volumes:
       - sqlserverdata:/var/opt/mssql
     healthcheck:
-      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 123456aA_! -Q 'SELECT 1'" ]
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/1433'"]
       interval: 10s
       timeout: 5s
       retries: 5
