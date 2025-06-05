@@ -32,7 +32,7 @@ public class GetAllPermissionQueryHandler(
     public async Task<IEnumerable<Domain.Permission>> Handle(GetAllPermissionQuery request, CancellationToken cancellationToken)
     {
         var repo = _unitOfWork.GetRepository<IPermissionRepository>();
-        var permissions = await repo.GetAllAsync(cancellationToken);
+        var permissions = await repo.GetAllAsync(true, cancellationToken);
 
         #region ElasticSearch
         var indexablePermissions = _autoMapper.Map<IEnumerable<IndexablePermission>>(permissions);

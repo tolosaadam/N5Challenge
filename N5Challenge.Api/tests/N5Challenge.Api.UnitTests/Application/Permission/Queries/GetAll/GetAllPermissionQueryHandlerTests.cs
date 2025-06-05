@@ -57,7 +57,7 @@ public class GetAllPermissionQueryHandlerTests
         };
 
         _pRepositoryMock
-            .Setup(r => r.GetAllAsync(cancellationToken))
+            .Setup(r => r.GetAllAsync(true, cancellationToken))
             .ReturnsAsync(permissions);
 
         _autoMapperMock

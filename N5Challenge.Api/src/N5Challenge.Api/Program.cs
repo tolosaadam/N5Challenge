@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using N5Challenge.Api.EndpointsDefinitions;
+using N5Challenge.Api.EndpointsDefinitions.Permission;
+using N5Challenge.Api.EndpointsDefinitions.PermissionType;
 using N5Challenge.Api.Extensions;
 using N5Challenge.Api.Infraestructure.SQL;
 using N5Challenge.Api.Middlewares;
@@ -18,7 +20,8 @@ builder.Services
     .AddSwaggerSettings()
     .AddBehaviorSettings()
     .AddElasticSearchSettings(builder.Configuration)
-    .AddKafkaSettings(builder.Configuration);
+    .AddKafkaSettings(builder.Configuration)
+    .AddCorsSettings();
 
 var app = builder.Build();
 
@@ -32,8 +35,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection()
+app.UseCors("AllowAllOrigins")
+    .UseHttpsRedirection()
     .UseMiddleware<HandlingExceptionMiddleware>();
 
 app.MapPermissionEndpoints()
+    .MapPermissionTypeEndpoints()
     .Run();

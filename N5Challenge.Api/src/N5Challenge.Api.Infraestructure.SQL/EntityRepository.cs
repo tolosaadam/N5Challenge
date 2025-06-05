@@ -37,7 +37,7 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
         return () => entityModel.Id;
     }
         
-    public IEnumerable<TDomainModel> GetAll() =>
+    public virtual IEnumerable<TDomainModel> GetAll() =>
         MapToDomainModel(
             _dbSet
             .ToList()
