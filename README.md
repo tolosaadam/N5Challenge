@@ -91,4 +91,4 @@ The Web API includes unit tests written with **MSTest**.
 ### 👤 Author
 
 **Adam Ezequiel Tolosa**  
-📧 [LinkedIn](https://www.linkedin.com/in/adam-ezequiel-tolosa/)
+📧 [LinkedIn](https://www.linkedin.com/in/tolosa-adam-ezequiel/)
