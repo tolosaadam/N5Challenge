@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IWriteRepository<TDomainModel, TId> : IRepository
+public interface IWriteRepository<TDomainModel, TId>
 {
     Func<TId> Add(TDomainModel domainModel);
     Task<Func<TId>> AddAsync(TDomainModel domainModel, CancellationToken cancellationToken = default);

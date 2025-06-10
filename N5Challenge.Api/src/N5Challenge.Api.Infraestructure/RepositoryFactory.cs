@@ -11,7 +11,7 @@ namespace N5Challenge.Api.Infraestructure;
 public class RepositoryFactory(IServiceProvider serviceProvider) : IRepositoryFactory
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    private readonly Dictionary<Type, IRepository> _cache = [];
+    private readonly Dictionary<Type, IEfRepository> _cache = [];
 
     public TRepository GetEfRepository<TRepository>()
     where TRepository : IEfRepository

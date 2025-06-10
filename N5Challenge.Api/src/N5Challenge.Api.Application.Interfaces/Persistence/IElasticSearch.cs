@@ -16,4 +16,7 @@ public interface IElasticSearch
     void Index(IIndexableEntity entity, string indexName);
 
     void Index(IEnumerable<IIndexableEntity> entities, string indexName);
+
+    Task<Domain.Permission?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Domain.Permission>> SearchAsync(string query, CancellationToken cancellationToken = default);
 }

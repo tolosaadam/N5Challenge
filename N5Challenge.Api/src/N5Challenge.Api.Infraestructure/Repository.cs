@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
 using N5Challenge.Api.Infraestructure.Entities;
@@ -8,13 +9,11 @@ using System.Security.Cryptography;
 
 namespace N5Challenge.Api.Infraestructure;
 
-public abstract class Repository<TContext, TDomainModel, TEntityModel, TId>(
-    TContext context,
-    IMapper autoMapper) : IRepository
+public abstract class Repository<TDomainModel, TEntityModel, TId>(
+    IMapper autoMapper)
     where TEntityModel : class, IEntity<TId>
     where TDomainModel : class, IDomainEntity<TId>
 {
-    protected readonly TContext _context = context;
     private readonly IMapper _autoMapper = autoMapper;
 
     protected virtual TDomainModel? MapToDomainModel(TEntityModel? entityModel) =>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IReadRepository<TDomainModel, TId> : IRepository
+public interface IReadRepository<TDomainModel, TId>
 {
     IEnumerable<TDomainModel> GetAll();
     Task<IEnumerable<TDomainModel>> GetAllAsync(CancellationToken cancellationToken = default);

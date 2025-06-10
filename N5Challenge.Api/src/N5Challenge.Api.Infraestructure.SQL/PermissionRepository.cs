@@ -12,12 +12,14 @@ using System.Threading.Tasks;
 namespace N5Challenge.Api.Infraestructure.SQL;
 
 public class PermissionRepository(AppDbContext context, IMapper autoMapper)
-    : EfRepository<Domain.Permission, PermissionDB, int>(context, autoMapper), IPermissionRepository
+    : EfRepository<Domain.Permission, PermissionDB, int>(autoMapper), IPermissionRepository
 {
+    protected override DbSet<PermissionDB> DbSet => context.Set<PermissionDB>();
+
     public async Task<IEnumerable<Domain.Permission>> GetAllAsync(bool includeType, CancellationToken cancellationToken = default)
     {
         return MapToDomainModel(
-            await _dbSet
+            await DbSet
             .AsNoTracking()
             .Include(x => x.Type)
             .ToListAsync(cancellationToken)

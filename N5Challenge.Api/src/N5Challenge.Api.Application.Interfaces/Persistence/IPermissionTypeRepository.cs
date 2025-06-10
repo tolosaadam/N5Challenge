@@ -8,7 +8,6 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IPermissionTypeRepository : 
     IReadRepository<Domain.PermissionType, int>,
-    IWriteRepository<Domain.PermissionType, int>,
-    IEfRepository
+    IWriteRepository<Domain.PermissionType, int>
 {
 }

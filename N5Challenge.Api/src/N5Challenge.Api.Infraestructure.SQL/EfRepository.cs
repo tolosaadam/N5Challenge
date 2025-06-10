@@ -11,22 +11,21 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Infraestructure.SQL;
 
-public class EfRepository<TDomainModel, TEntityModel, TId>(
-    AppDbContext context,
-    IMapper autoMapper) : Repository<AppDbContext, TDomainModel, TEntityModel, TId>(context, autoMapper),
+public abstract class EfRepository<TDomainModel, TEntityModel, TId>(
+    IMapper autoMapper) : Repository<TDomainModel, TEntityModel, TId>(autoMapper),
+    IEfRepository,
     IReadRepository<TDomainModel, TId>,
-    IWriteRepository<TDomainModel, TId>,
-    IEfRepository
+    IWriteRepository<TDomainModel, TId>
     where TEntityModel : class, IEntity<TId>
     where TDomainModel : class, IDomainEntity<TId>
 {
-    protected readonly DbSet<TEntityModel> _dbSet = context.Set<TEntityModel>();
+    protected abstract DbSet<TEntityModel> DbSet { get; }
 
     public virtual Func<TId> Add(TDomainModel domainModel)
     {
         var entityModel = MapToEntityModel(domainModel);
 
-        _dbSet.Add(entityModel);
+        DbSet.Add(entityModel);
 
         return () => entityModel.Id;
     }
@@ -35,40 +34,40 @@ public class EfRepository<TDomainModel, TEntityModel, TId>(
     {
         var entityModel = MapToEntityModel(domainModel);
 
-        await _dbSet.AddAsync(entityModel, cancellationToken);
+        await DbSet.AddAsync(entityModel, cancellationToken);
 
         return () => entityModel.Id;
     }
 
     public virtual IEnumerable<TDomainModel> GetAll() =>
         MapToDomainModel(
-            _dbSet
+            DbSet
             .ToList()
         );
 
     public virtual async Task<IEnumerable<TDomainModel>> GetAllAsync(CancellationToken cancellationToken = default) =>
         MapToDomainModel(
-            await _dbSet
+            await DbSet
             .AsNoTracking()
             .ToListAsync(cancellationToken)
         );
 
     public virtual TDomainModel? GetById(TId id) =>
         MapToDomainModel(
-            _dbSet
+            DbSet
             .AsNoTracking()
             .FirstOrDefault(x => x.Id!.Equals(id))
         );
 
     public virtual async Task<TDomainModel?> GetByIdAsync(TId id, CancellationToken cancellationToken = default) =>
         MapToDomainModel(
-            await _dbSet
+            await DbSet
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id!.Equals(id), cancellationToken: cancellationToken)
         );
 
     public virtual void Delete(TDomainModel domainModel) =>
-        _dbSet
+        DbSet
         .Remove(MapToEntityModel(domainModel));
 
 
@@ -76,7 +75,7 @@ public class EfRepository<TDomainModel, TEntityModel, TId>(
     {
         var entityModel = MapToEntityModel(domainModel);
 
-        var result = _dbSet.Update(entityModel);
+        var result = DbSet.Update(entityModel);
 
         return MapToDomainModel(result.Entity);
     }
