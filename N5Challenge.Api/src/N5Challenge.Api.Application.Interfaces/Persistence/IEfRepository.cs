@@ -9,14 +9,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IEfRepository<TDomainModel, TId> : IRepository
+public interface IEfRepository : IRepository
 {
-    Func<TId> Add(TDomainModel domainModel);
-    Task<Func<TId>> AddAsync(TDomainModel domainModel, CancellationToken cancellationToken = default);
-    IEnumerable<TDomainModel> GetAll();
-    Task<IEnumerable<TDomainModel>> GetAllAsync(CancellationToken cancellationToken = default);
-    TDomainModel? GetById(TId id);
-    Task<TDomainModel?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
-    TDomainModel? Update(TDomainModel domainModel);
-    void Delete(TDomainModel domainModel);
+
 }

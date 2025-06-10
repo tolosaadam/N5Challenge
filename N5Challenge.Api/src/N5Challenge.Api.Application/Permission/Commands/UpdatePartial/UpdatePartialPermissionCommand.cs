@@ -38,7 +38,7 @@ public class UpdatePartialPermissionCommandHandler(
     public async Task Handle(UpdatePartialPermissionCommand request, CancellationToken cancellationToken)
     {
 
-        var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
+        var pRepository = _unitOfWork.GetEfRepository<IPermissionRepository>();
 
         var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
 
@@ -49,7 +49,7 @@ public class UpdatePartialPermissionCommandHandler(
 
         if (request.PermissionTypeId is not null)
         {
-            var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();
+            var ptRepository = _unitOfWork.GetEfRepository<IPermissionTypeRepository>();
 
 
             var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId.Value, cancellationToken);

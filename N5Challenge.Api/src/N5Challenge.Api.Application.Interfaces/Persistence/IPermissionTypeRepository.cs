@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IPermissionTypeRepository : IEfRepository<Domain.PermissionType, int>
+public interface IPermissionTypeRepository : 
+    IReadRepository<Domain.PermissionType, int>,
+    IWriteRepository<Domain.PermissionType, int>,
+    IEfRepository
 {
 }

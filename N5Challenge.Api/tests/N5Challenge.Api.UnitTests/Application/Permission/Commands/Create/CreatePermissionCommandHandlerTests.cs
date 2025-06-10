@@ -30,11 +30,11 @@ public class CreatePermissionCommandHandlerTests
     public void Setup()
     {
         _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionRepository>())
+            .Setup(u => u.GetEfRepository<IPermissionRepository>())
             .Returns(_pRepositoryMock.Object);
 
         _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionTypeRepository>())
+            .Setup(u => u.GetEfRepository<IPermissionTypeRepository>())
             .Returns(_pTypeRepositoryMock.Object);
 
         _handler = new CreatePermissionCommandHandler(

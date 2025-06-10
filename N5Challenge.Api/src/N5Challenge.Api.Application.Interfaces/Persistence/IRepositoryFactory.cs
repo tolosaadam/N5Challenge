@@ -8,5 +8,6 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IRepositoryFactory
 {
-    TRepository GetRepository<TRepository>() where TRepository : IRepository;
+    TRepository GetEfRepository<TRepository>()
+    where TRepository : IEfRepository;
 }

@@ -38,7 +38,7 @@ public class UpdatePermissionCommandHandler(
     public async Task Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
 
-        var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
+        var pRepository = _unitOfWork.GetEfRepository<IPermissionRepository>();
 
         var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
 
@@ -47,7 +47,7 @@ public class UpdatePermissionCommandHandler(
             throw new EntityNotFoundException(nameof(Domain.Permission), request.Id);
         }
 
-        var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();
+        var ptRepository = _unitOfWork.GetEfRepository<IPermissionTypeRepository>();
 
         var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
 

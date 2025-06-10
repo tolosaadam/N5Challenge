@@ -28,7 +28,7 @@ public class GetAllPermissionQueryHandlerTests
     public void Setup()
     {
         _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionRepository>())
+            .Setup(u => u.GetEfRepository<IPermissionRepository>())
             .Returns(_pRepositoryMock.Object);
 
         _handler = new GetAllPermissionQueryHandler(

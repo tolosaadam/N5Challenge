@@ -26,7 +26,7 @@ public class GetAllPermissionTypeQueryHandlerTests
     public void Setup()
     {
         _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionTypeRepository>())
+            .Setup(u => u.GetEfRepository<IPermissionTypeRepository>())
             .Returns(_ptRepositoryMock.Object);
 
         _handler = new GetAllPermissionTypeQueryHandler(

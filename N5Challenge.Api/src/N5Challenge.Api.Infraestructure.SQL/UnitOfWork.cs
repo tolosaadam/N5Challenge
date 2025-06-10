@@ -87,6 +87,6 @@ public class UnitOfWork(
         }
     }
 
-    public TRepository GetRepository<TRepository>() where TRepository : IRepository =>
-        _repositoryFactory.GetRepository<TRepository>();
+    public TRepository GetEfRepository<TRepository>() where TRepository : IEfRepository =>
+        _repositoryFactory.GetEfRepository<TRepository>();
 }

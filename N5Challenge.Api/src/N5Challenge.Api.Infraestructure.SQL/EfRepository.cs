@@ -14,7 +14,9 @@ namespace N5Challenge.Api.Infraestructure.SQL;
 public class EfRepository<TDomainModel, TEntityModel, TId>(
     AppDbContext context,
     IMapper autoMapper) : Repository<AppDbContext, TDomainModel, TEntityModel, TId>(context, autoMapper),
-    IEfRepository<TDomainModel, TId>
+    IReadRepository<TDomainModel, TId>,
+    IWriteRepository<TDomainModel, TId>,
+    IEfRepository
     where TEntityModel : class, IEntity<TId>
     where TDomainModel : class, IDomainEntity<TId>
 {
