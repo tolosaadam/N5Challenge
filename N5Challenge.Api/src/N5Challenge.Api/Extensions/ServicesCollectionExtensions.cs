@@ -7,7 +7,7 @@ using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Permission.Commands.Create;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using N5Challenge.Api.AutoMapperProfiles;
-using N5Challenge.Api.Infraestructure.Services.ElasticSearch;
+using N5Challenge.Api.Infraestructure.ElasticSearch;
 using N5Challenge.Api.Infraestructure.Services.Kafka;
 using N5Challenge.Api.Infraestructure.SQL;
 using Nest;

@@ -5,7 +5,7 @@ using N5Challenge.Api.Application.Interfaces.Persistence;
 using Nest;
 using System.Threading;
 
-namespace N5Challenge.Api.Infraestructure.Services.ElasticSearch;
+namespace N5Challenge.Api.Infraestructure.ElasticSearch;
 public class ElasticSearch(IElasticClient elasticClient, IOptions<ElasticSearchSettings> esSettings, ILogger<ElasticSearch> logger)
 {
     private readonly IElasticClient _elasticClient = elasticClient;

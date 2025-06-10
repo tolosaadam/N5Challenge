@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.Services.Kafka", "src\N5Challenge.Api.Infraestructure.Services.Kafka\N5Challenge.Api.Infraestructure.Services.Kafka.csproj", "{49ABD3D1-0C1E-485B-94E5-32E9BD12DE2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.Services.ElasticSearch", "src\N5Challenge.Api.Infraestructure.Services.ElasticSearch\N5Challenge.Api.Infraestructure.Services.ElasticSearch.csproj", "{1FB3B35C-B39F-4545-A399-D13085BFE8DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N5Challenge.Api.Infraestructure.ElasticSearch", "src\N5Challenge.Api.Infraestructure.ElasticSearch\N5Challenge.Api.Infraestructure.ElasticSearch.csproj", "{1FB3B35C-B39F-4545-A399-D13085BFE8DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Background", "Background", "{BB9C3772-7466-41D0-83EB-E449FC88679C}"
 EndProject

@@ -13,7 +13,7 @@ COPY ["src/N5Challenge.Api.Application.Interfaces/N5Challenge.Api.Application.In
 COPY ["src/N5Challenge.Api.Domain/N5Challenge.Api.Domain.csproj", "src/N5Challenge.Api.Domain/"]
 COPY ["src/N5Challenge.Api.Infraestructure/N5Challenge.Api.Infraestructure.csproj", "src/N5Challenge.Api.Infraestructure/"]
 COPY ["src/N5Challenge.Api.Infraestructure.SQL/N5Challenge.Api.Infraestructure.SQL.csproj", "src/N5Challenge.Api.Infraestructure.SQL/"]
-COPY ["src/N5Challenge.Api.Infraestructure.Services.ElasticSearch/N5Challenge.Api.Infraestructure.Services.ElasticSearch.csproj", "src/N5Challenge.Api.Infraestructure.Services.ElasticSearch/"]
+COPY ["src/N5Challenge.Api.Infraestructure.ElasticSearch/N5Challenge.Api.Infraestructure.ElasticSearch.csproj", "src/N5Challenge.Api.Infraestructure.ElasticSearch/"]
 COPY ["src/N5Challenge.Api.Infraestructure.Services.Kafka/N5Challenge.Api.Infraestructure.Services.Kafka.csproj", "src/N5Challenge.Api.Infraestructure.Services.Kafka/"]
 
 RUN dotnet restore "src/N5Challenge.Api/N5Challenge.Api.csproj"
