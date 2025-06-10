@@ -36,7 +36,7 @@ public class CreatePermissionCommandHandler(
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
-        var ptRepository = _unitOfWork.GetEfRepository<IPermissionTypeRepository>();
+        var ptRepository = _unitOfWork.GetEfRepository<IEfPermissionTypeRepository>();
 
         var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
 
@@ -48,7 +48,7 @@ public class CreatePermissionCommandHandler(
                 request.PermissionTypeId);
         }
 
-        var pRepository = _unitOfWork.GetEfRepository<IPermissionRepository>();
+        var pRepository = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
 
         var pDomain = _autoMapper.Map<Domain.Permission>(request);
 

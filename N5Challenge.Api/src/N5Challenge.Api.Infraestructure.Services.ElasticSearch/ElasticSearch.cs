@@ -6,7 +6,7 @@ using Nest;
 using System.Threading;
 
 namespace N5Challenge.Api.Infraestructure.Services.ElasticSearch;
-public class ElasticSearch(IElasticClient elasticClient, IOptions<ElasticSearchSettings> esSettings, ILogger<ElasticSearch> logger) : IElasticSearch
+public class ElasticSearch(IElasticClient elasticClient, IOptions<ElasticSearchSettings> esSettings, ILogger<ElasticSearch> logger)
 {
     private readonly IElasticClient _elasticClient = elasticClient;
     private readonly string _defaultIndexName = esSettings?.Value?.DefaultIndexName!;

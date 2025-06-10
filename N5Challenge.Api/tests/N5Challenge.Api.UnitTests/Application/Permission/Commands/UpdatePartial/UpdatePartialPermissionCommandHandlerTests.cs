@@ -20,8 +20,8 @@ namespace N5Challenge.Api.UnitTests.Application.Permission.Commands.UpdatePartia
 public class UpdatePartialPermissionCommandHandlerTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IPermissionRepository> _pRepositoryMock = new();
-    private readonly Mock<IPermissionTypeRepository> _pTypeRepositoryMock = new();
+    private readonly Mock<IEfPermissionRepository> _pRepositoryMock = new();
+    private readonly Mock<IEfPermissionTypeRepository> _pTypeRepositoryMock = new();
     private readonly Mock<IMapper> _autoMapperMock = new();
     private readonly Mock<IElasticSearch> _elasticSearchMock = new();
 
@@ -31,11 +31,11 @@ public class UpdatePartialPermissionCommandHandlerTests
     public void Setup()
     {
         _unitOfWorkMock
-            .Setup(u => u.GetEfRepository<IPermissionRepository>())
+            .Setup(u => u.GetEfRepository<IEfPermissionRepository>())
             .Returns(_pRepositoryMock.Object);
 
         _unitOfWorkMock
-            .Setup(u => u.GetEfRepository<IPermissionTypeRepository>())
+            .Setup(u => u.GetEfRepository<IEfPermissionTypeRepository>())
             .Returns(_pTypeRepositoryMock.Object);
 
         _handler = new UpdatePartialPermissionCommandHandler(

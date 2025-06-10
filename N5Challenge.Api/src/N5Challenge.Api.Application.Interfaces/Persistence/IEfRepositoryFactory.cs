@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IRepositoryFactory
+public interface IEfRepositoryFactory
 {
     TRepository GetEfRepository<TRepository>()
     where TRepository : IEfRepository;

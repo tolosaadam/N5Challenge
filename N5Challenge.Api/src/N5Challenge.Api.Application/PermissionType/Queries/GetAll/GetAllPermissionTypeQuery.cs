@@ -25,7 +25,7 @@ public class GetAllPermissionTypeQueryHandler(
 
     public async Task<IEnumerable<Domain.PermissionType>> Handle(GetAllPermissionTypeQuery request, CancellationToken cancellationToken)
     {
-        var repo = _unitOfWork.GetEfRepository<IPermissionTypeRepository>();
+        var repo = _unitOfWork.GetEfRepository<IEfPermissionTypeRepository>();
         var permissionTypes = await repo.GetAllAsync(cancellationToken);
 
         return permissionTypes;

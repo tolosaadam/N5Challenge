@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IPermissionRepository : 
+public interface IEfPermissionRepository : 
+    IEfRepository,
     IReadRepository<Domain.Permission, int>,
     IWriteRepository<Domain.Permission, int>
 {

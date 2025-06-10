@@ -18,7 +18,7 @@ namespace N5Challenge.Api.UnitTests.Application.PermissionType.Queries.GetAll;
 public class GetAllPermissionTypeQueryHandlerTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IPermissionTypeRepository> _ptRepositoryMock = new();
+    private readonly Mock<IEfPermissionTypeRepository> _ptRepositoryMock = new();
 
     private GetAllPermissionTypeQueryHandler _handler = null!;
 
@@ -26,7 +26,7 @@ public class GetAllPermissionTypeQueryHandlerTests
     public void Setup()
     {
         _unitOfWorkMock
-            .Setup(u => u.GetEfRepository<IPermissionTypeRepository>())
+            .Setup(u => u.GetEfRepository<IEfPermissionTypeRepository>())
             .Returns(_ptRepositoryMock.Object);
 
         _handler = new GetAllPermissionTypeQueryHandler(

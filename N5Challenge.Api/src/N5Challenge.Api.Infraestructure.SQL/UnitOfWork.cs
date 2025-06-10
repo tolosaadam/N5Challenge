@@ -12,11 +12,11 @@ namespace N5Challenge.Api.Infraestructure.SQL;
 
 public class UnitOfWork(
     AppDbContext context,
-    IRepositoryFactory repositoryFactory) : IUnitOfWork
+    IEfRepositoryFactory repositoryFactory) : IUnitOfWork
 {
     private readonly AppDbContext _context = context;
     private IDbContextTransaction? _transaction;
-    private readonly IRepositoryFactory _repositoryFactory = repositoryFactory;
+    private readonly IEfRepositoryFactory _repositoryFactory = repositoryFactory;
     private bool _disposed;
 
     public bool HasActiveTransaction => _transaction is not null;

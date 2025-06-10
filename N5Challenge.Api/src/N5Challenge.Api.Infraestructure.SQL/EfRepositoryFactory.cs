@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure;
+namespace N5Challenge.Api.Infraestructure.SQL;
 
-public class RepositoryFactory(IServiceProvider serviceProvider) : IRepositoryFactory
+public class EfRepositoryFactory(IServiceProvider serviceProvider) : IEfRepositoryFactory
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly Dictionary<Type, IEfRepository> _cache = [];
