@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IIndexableEntity : IEntity<string>
+public interface IIndexableEntity
 {
+    string Id { get; }
 }

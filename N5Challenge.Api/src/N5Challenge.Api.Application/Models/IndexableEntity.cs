@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Models;
 
-public class IndexableEntity : IIndexableEntity
+public class IndexableEntity(string id) : IIndexableEntity
 {
-    public string Id { get; }
-
-    public IndexableEntity(string id)
-    {
-        Id = id ?? throw new ArgumentNullException(nameof(id));
-    }
+    public string Id { get; } = id ?? throw new ArgumentNullException(nameof(id));
 }

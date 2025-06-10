@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Domain;
+using N5Challenge.Api.Infraestructure.Entities;
 
 namespace N5Challenge.Api.AutoMapperProfiles;
 
@@ -71,10 +72,10 @@ public class PermissionProfile : Profile
         #region Repository
 
         _ = CreateMap<Domain.Permission,
-            Infraestructure.SQL.Entities.PermissionDB>()
+            PermissionDB>()
             .ForMember(dest => dest.Type, opt => opt.Ignore());
 
-        _ = CreateMap<Infraestructure.SQL.Entities.PermissionDB,
+        _ = CreateMap<PermissionDB,
            Domain.Permission>();
 
         #endregion

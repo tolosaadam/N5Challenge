@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\N5Challenge.Api.Application.Interfaces\N5Challenge.Api.Application.Interfaces.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj" />
+    <ProjectReference Include="..\N5Challenge.Api.Infraestructure\N5Challenge.Api.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>

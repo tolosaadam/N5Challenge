@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using N5Challenge.Api.Infraestructure.SQL.Entities;
+using N5Challenge.Api.Infraestructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

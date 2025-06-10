@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IPermissionRepository : IEntityRepository<Domain.Permission, int>
+public interface IPermissionRepository : IEfRepository<Domain.Permission, int>
 {
     Task<IEnumerable<Domain.Permission>> GetAllAsync(bool includeType, CancellationToken cancellationToken = default);
 }

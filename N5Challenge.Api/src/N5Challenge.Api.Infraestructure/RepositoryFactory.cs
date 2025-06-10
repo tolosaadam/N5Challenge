@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure.SQL;
+namespace N5Challenge.Api.Infraestructure;
 
 public class RepositoryFactory(IServiceProvider serviceProvider) : IRepositoryFactory
 {

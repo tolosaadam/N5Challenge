@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
+using N5Challenge.Api.Infraestructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Infraestructure.SQL;
 
-public class EntityRepository<TDomainModel, TEntityModel, TId>(
+public class EfRepository<TDomainModel, TEntityModel, TId>(
     AppDbContext context,
-    IMapper autoMapper) : Repository(context), IEntityRepository<TDomainModel, TId>
-    where TDomainModel : class, IEntity<TId>
+    IMapper autoMapper) : Repository<AppDbContext, TDomainModel, TEntityModel, TId>(context, autoMapper),
+    IEfRepository<TDomainModel, TId>
     where TEntityModel : class, IEntity<TId>
+    where TDomainModel : class, IDomainEntity<TId>
 {
     protected readonly DbSet<TEntityModel> _dbSet = context.Set<TEntityModel>();
-    private readonly IMapper _autoMapper = autoMapper;
 
     public virtual Func<TId> Add(TDomainModel domainModel)
     {
@@ -26,7 +27,7 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
         _dbSet.Add(entityModel);
 
         return () => entityModel.Id;
-    }    
+    }
 
     public virtual async Task<Func<TId>> AddAsync(TDomainModel domainModel, CancellationToken cancellationToken = default)
     {
@@ -36,7 +37,7 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
 
         return () => entityModel.Id;
     }
-        
+
     public virtual IEnumerable<TDomainModel> GetAll() =>
         MapToDomainModel(
             _dbSet
@@ -77,16 +78,4 @@ public class EntityRepository<TDomainModel, TEntityModel, TId>(
 
         return MapToDomainModel(result.Entity);
     }
-
-    protected virtual TDomainModel? MapToDomainModel(TEntityModel? entityModel) =>
-        entityModel is null ? null : _autoMapper.Map<TEntityModel?, TDomainModel?>(entityModel);
-
-    protected virtual TEntityModel MapToEntityModel(TDomainModel domainModel) =>
-        _autoMapper.Map<TDomainModel, TEntityModel>(domainModel);
-
-    protected virtual IEnumerable<TDomainModel> MapToDomainModel(IEnumerable<TEntityModel> entityModel) =>
-        entityModel is null ? [] : _autoMapper.Map<IEnumerable<TDomainModel>>(entityModel);
-
-    protected virtual IEnumerable<TEntityModel> MapToEntityModel(IEnumerable<TDomainModel> domainModel) =>
-        _autoMapper.Map<IEnumerable<TDomainModel>, IEnumerable<TEntityModel>>(domainModel);
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Domain;
 
-public class Entity<TId> : IEntity<TId>
+public interface IDomainEntity<TId>
 {
-    public TId Id { get; set; } = default!;
+    TId Id { get; }
 }

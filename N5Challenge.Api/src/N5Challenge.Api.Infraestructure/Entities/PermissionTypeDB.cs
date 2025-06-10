@@ -1,12 +1,10 @@
-﻿using N5Challenge.Api.Application.Interfaces;
-using N5Challenge.Api.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure.SQL.Entities;
+namespace N5Challenge.Api.Infraestructure.Entities;
 
 public class PermissionTypeDB : Entity<int>
 {
