@@ -11,16 +11,10 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Infraestructure.ElasticSearch;
 
-public class ElasticSearchSeeder
+public class ElasticSearchSeeder(IElasticClient elasticClient, ILogger<ElasticSearchSeeder> logger)
 {
-    private readonly IElasticClient _elasticClient;
-    private readonly ILogger<ElasticSearchSeeder> _logger;
-
-    public ElasticSearchSeeder(IElasticClient elasticClient, ILogger<ElasticSearchSeeder> logger)
-    {
-        _elasticClient = elasticClient;
-        _logger = logger;
-    }
+    private readonly IElasticClient _elasticClient = elasticClient;
+    private readonly ILogger<ElasticSearchSeeder> _logger = logger;
 
     public async Task SeedPermissionsAsync(CancellationToken cancellationToken = default)
     {

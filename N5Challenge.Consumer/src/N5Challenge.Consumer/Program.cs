@@ -13,7 +13,7 @@ var elasticClient = new ElasticClient(settings);
 builder.Services.AddHostedService<KafkaConsumerBackgroundService>();
 builder.Services.Configure<N5Challenge.Common.KafkaSettings>(builder.Configuration.GetSection("Kafka"));
 builder.Services.AddSingleton<IElasticClient>(elasticClient);
-builder.Services.AddScoped<IElasticSearchService, ElasticSearchService>();
+builder.Services.AddScoped(typeof(IElasticSearchService<>), typeof(ElasticSearchService<>));
 
 
 var host = builder.Build();

@@ -20,8 +20,8 @@ services:
 
   api:
     build:
-      context: ./N5Challenge.Api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: N5Challenge.Api/Dockerfile
     container_name: n5challenge-api
     ports:
       - "8080:8080"
