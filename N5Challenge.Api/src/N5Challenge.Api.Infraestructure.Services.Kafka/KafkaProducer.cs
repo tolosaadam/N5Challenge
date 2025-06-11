@@ -61,7 +61,7 @@ public class KafkaProducer : IKafkaProducer
         {
             var envelope = new KafkaEnvelope<TDomainModel>
             {
-                Operation = operation.ToString(),
+                Operation = operation,
                 Payload = entity
             };
 
@@ -75,7 +75,7 @@ public class KafkaProducer : IKafkaProducer
             var result = await _producer.ProduceAsync(topic, new Message<string, string>
             {
                 Key = Guid.NewGuid().ToString(),
-                Value = operation.ToString()
+                Value = json
             },
             cancellationToken);
 

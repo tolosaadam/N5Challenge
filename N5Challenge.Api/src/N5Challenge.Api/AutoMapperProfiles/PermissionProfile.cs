@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Domain;
 using N5Challenge.Api.Infraestructure.Entities;
 

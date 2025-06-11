@@ -24,7 +24,7 @@ public static class SeedDataConstants
             EmployeeLastName = "Tolosa",
             EmployeeFirstName = "Adam",
             PermissionTypeId = 1,
-            Date = DateTime.Today
+            Date = new DateTime(2025, 6, 10)
         },
         new PermissionDB
         {
@@ -32,7 +32,7 @@ public static class SeedDataConstants
             EmployeeLastName = "Adam",
             EmployeeFirstName = "Tolosa",
             PermissionTypeId = 2,
-            Date = DateTime.Today
+            Date = new DateTime(2025, 6, 10)
         }
     ];
 }

@@ -3,7 +3,6 @@ using MediatR;
 using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Domain.Enums;
@@ -66,7 +65,6 @@ public class CreatePermissionCommandHandler(
         pDomain.Id = id;
 
         await _kafkaProducer.PublishEventAsync(request.Topic, pDomain, request.Operation, cancellationToken);
-        var result = await _elasticPermissionRepository.AddAsync(pDomain, cancellationToken);
 
         return id;
     }

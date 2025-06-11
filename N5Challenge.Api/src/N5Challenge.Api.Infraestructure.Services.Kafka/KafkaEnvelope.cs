@@ -9,7 +9,7 @@ namespace N5Challenge.Api.Infraestructure.Services.Kafka;
 
 public class KafkaEnvelope<T>
 {
-    public string? Operation { get; set; }
+    public OperationEnum Operation { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public T Payload { get; set; } = default!;
 }

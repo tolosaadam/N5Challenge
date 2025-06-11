@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using N5Challenge.Api.Infraestructure.SQL;
 
@@ -11,9 +12,11 @@ using N5Challenge.Api.Infraestructure.SQL;
 namespace N5Challenge.Api.Infraestructure.SQL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611035413_migracion1234")]
+    partial class migracion1234
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +55,7 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             EmployeeFirstName = "Adam",
                             EmployeeLastName = "Tolosa",
                             PermissionTypeId = 1
@@ -60,7 +63,7 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             EmployeeFirstName = "Tolosa",
                             EmployeeLastName = "Adam",
                             PermissionTypeId = 2

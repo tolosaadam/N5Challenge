@@ -1,13 +1,16 @@
-﻿using System;
+﻿using N5Challenge.Consumer.Domain.Models.Indexables;
+using N5Challenge.Consumer.Domain.Models.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Application.Models;
+namespace N5Challenge.Consumer.Domain.Models.Domain;
 
-public class IndexablePermission(string id) : IndexableEntity(id)
+public class Permission : IDomainEntity<int>
 {
+    public int Id { get; set; }
     public string? EmployeeFirstName { get; set; }
     public string? EmployeeLastName { get; set; }
     public DateTime Date { get; set; }

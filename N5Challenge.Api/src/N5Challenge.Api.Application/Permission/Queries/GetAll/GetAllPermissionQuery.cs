@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
-using N5Challenge.Api.Application.Constants;
+﻿using MediatR;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
 using N5Challenge.Api.Infraestructure.Entities;
@@ -14,8 +13,7 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
     IMapper autoMapper,
     IElasticClient elasticClient,
     ILogger<ElasticSearchRepository<TDomainModel, TEntityModel, TId>> logger) : Repository<TDomainModel, TEntityModel, TId>(autoMapper),
-    IReadRepository<TDomainModel, TId>,
-    IWriteRepository<TDomainModel, TId>
+    IReadRepository<TDomainModel, TId>
     where TEntityModel : class, IEntity<TId>
     where TDomainModel : class, IDomainEntity<TId>
 {
@@ -79,7 +77,6 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
 
         return MapToDomainModel(response.Source);
     }
-
     public virtual async Task<Func<TId>> AddAsync(TDomainModel entity, CancellationToken cancellationToken)
     {
         var doc = MapToEntityModel(entity);
@@ -92,21 +89,6 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
             throw new InvalidOperationException($"Failed to add document to index {IndexName}: {response.ServerError?.Error?.Reason}");
 
         return () => entity.Id;
-    }
-
-    public Func<TId> Add(TDomainModel domainModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public TDomainModel? Update(TDomainModel domainModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(TDomainModel domainModel)
-    {
-        throw new NotImplementedException();
     }
 
     //public async Task IndexAsync(IEnumerable<IIndexableEntity> entities, string indexName, CancellationToken cancellationToken)
