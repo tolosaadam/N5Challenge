@@ -22,20 +22,22 @@ public record CreatePermissionCommand(
     int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.request;
-    public string Topic => "permission";
+    public string Topic => EntityRawNameConstans.PERMISSIONS;
 }
 
 public class CreatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
     IElasticPermissionTypeRepository elasticPermissionTypeRepository,
-    IElasticPermissionRepository elasticPermissionRepository)
+    IElasticPermissionRepository elasticPermissionRepository,
+    IKafkaProducer kafkaProducer)
     : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
     private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
     private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
+    private readonly IKafkaProducer _kafkaProducer = kafkaProducer;
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
@@ -62,6 +64,8 @@ public class CreatePermissionCommandHandler(
         var id = getId();
 
         pDomain.Id = id;
+
+        await _kafkaProducer.PublishEventAsync(request.Topic, pDomain, request.Operation, cancellationToken);
         var result = await _elasticPermissionRepository.AddAsync(pDomain, cancellationToken);
 
         return id;

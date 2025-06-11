@@ -26,7 +26,7 @@ public class GetAllPermissionQueryHandler(
 
     public async Task<IEnumerable<Domain.Permission>> Handle(GetAllPermissionQuery request, CancellationToken cancellationToken)
     {
-        var result = await _elasticPermissionRepository.GetAllAsync(cancellationToken);
+        var result = await _elasticPermissionRepository.GetAllAsync(true, cancellationToken);
 
         return result;
     }

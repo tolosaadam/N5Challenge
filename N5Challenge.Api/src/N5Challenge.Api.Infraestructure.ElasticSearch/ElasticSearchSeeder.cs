@@ -24,7 +24,7 @@ public class ElasticSearchSeeder
 
     public async Task SeedPermissionsAsync(CancellationToken cancellationToken = default)
     {
-        var indexName = IndexNamesConstans.PERMISSION_INDEX_NAME;
+        var indexName = EntityRawNameConstans.PERMISSIONS;
 
         var exists = await _elasticClient.Indices.ExistsAsync(indexName, ct: cancellationToken);
         if (!exists.Exists)
@@ -58,7 +58,7 @@ public class ElasticSearchSeeder
 
     public async Task SeedPermissionTypesAsync(CancellationToken cancellationToken = default)
     {
-        var indexName = IndexNamesConstans.PERMISSION_TYPE_INDEX_NAME;
+        var indexName = EntityRawNameConstans.PERMISSION_TYPES;
 
         var exists = await _elasticClient.Indices.ExistsAsync(indexName, ct: cancellationToken);
         if (!exists.Exists)

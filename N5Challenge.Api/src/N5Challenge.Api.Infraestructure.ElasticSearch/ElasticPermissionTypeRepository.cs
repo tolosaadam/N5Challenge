@@ -19,5 +19,5 @@ public class ElasticPermissionTypeRepository(
     : ElasticSearchRepository<Domain.PermissionType, PermissionTypeDB, int>(autoMapper, elasticClient, logger),
     IElasticPermissionTypeRepository
 {
-    protected override string IndexName => IndexNamesConstans.PERMISSION_TYPE_INDEX_NAME;
+    protected override string IndexName => EntityRawNameConstans.PERMISSION_TYPES;
 }

@@ -6,6 +6,7 @@ using N5Challenge.Api.Domain;
 using N5Challenge.Api.Domain.Enums;
 using System.Runtime;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace N5Challenge.Api.Infraestructure.Services.Kafka;
 
@@ -31,10 +32,46 @@ public class KafkaProducer : IKafkaProducer
             .Build();
     }
 
-    public async Task SendMessageAsync(string topic, OperationEnum operation, CancellationToken cancellationToken)
+    public async Task PublishAuditableEventAsync(string topic, OperationEnum operation, CancellationToken cancellationToken)
     {
         try
         {
+            var result = await _producer.ProduceAsync($"{topic}.auditable", new Message<string, string>
+            {
+                Key = Guid.NewGuid().ToString(),
+                Value = operation.ToString()
+            },
+            cancellationToken);
+
+            _logger.LogInformation("Success message send. Topic: {@Topic}, Operation: {@Operation}", topic, operation);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending message. Topic: {@Topic}, Operation: {@Operation}", topic, operation);
+        }
+    }
+
+    public async Task PublishEventAsync<TDomainModel>(
+        string topic,
+        TDomainModel entity,
+        OperationEnum operation,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var envelope = new KafkaEnvelope<TDomainModel>
+            {
+                Operation = operation.ToString(),
+                Payload = entity
+            };
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+
+            var json = JsonSerializer.Serialize(envelope, options);
+
             var result = await _producer.ProduceAsync(topic, new Message<string, string>
             {
                 Key = Guid.NewGuid().ToString(),
@@ -42,7 +79,7 @@ public class KafkaProducer : IKafkaProducer
             },
             cancellationToken);
 
-            _logger.LogInformation("Success message send. Topic: {@Topic}, Operation: {Operation}", topic, operation);
+            _logger.LogInformation("Success message send. Topic: {@Topic}, Entity: {@Entity} Operation: {@Operation}", topic, entity, operation);
         }
         catch (Exception ex)
         {

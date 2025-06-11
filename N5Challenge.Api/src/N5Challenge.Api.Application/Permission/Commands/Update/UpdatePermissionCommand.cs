@@ -4,6 +4,7 @@ using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,20 +22,22 @@ public record UpdatePermissionCommand(
     DateTime Date) : IRequest, ICommand, IPublishEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.modify;
-    public string Topic => "permission";
+    public string Topic => EntityRawNameConstans.PERMISSIONS;
 }
 
 public class UpdatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
     IElasticPermissionRepository elasticPermissionRepository,
-    IElasticPermissionTypeRepository elasticPermissionTypeRepository)
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository,
+    IKafkaProducer kafkaProducer)
     : IRequestHandler<UpdatePermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
     private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
     private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
+    private readonly IKafkaProducer _kafkaProducer = kafkaProducer;
 
     public async Task Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
@@ -63,5 +66,7 @@ public class UpdatePermissionCommandHandler(
         var updatedP = pRepository.Update(pToUpdate);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await _kafkaProducer.PublishEventAsync(request.Topic, updatedP, request.Operation, cancellationToken);
     }
 }

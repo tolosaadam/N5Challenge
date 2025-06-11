@@ -21,7 +21,7 @@ public class ElasticPermissionRepository(
     : ElasticSearchRepository<Domain.Permission, PermissionDB, int>(autoMapper, elasticClient, logger),
     IElasticPermissionRepository
 {
-    protected override string IndexName => IndexNamesConstans.PERMISSION_INDEX_NAME;
+    protected override string IndexName => EntityRawNameConstans.PERMISSIONS;
     private readonly IElasticPermissionTypeRepository _permissionTypeRepository = permissionTypeRepository;
 
     public async Task<IEnumerable<Domain.Permission>> GetAllAsync(bool include = false, CancellationToken cancellationToken = default)

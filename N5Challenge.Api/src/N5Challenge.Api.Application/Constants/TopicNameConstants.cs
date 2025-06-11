@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Domain.Enums;
+namespace N5Challenge.Api.Application.Constants;
 
-public enum OperationEnum
+public class TopicNameConstants
 {
-    modify,
-    request,
-    get
 }
