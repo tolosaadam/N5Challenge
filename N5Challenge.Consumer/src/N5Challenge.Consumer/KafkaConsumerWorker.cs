@@ -93,18 +93,14 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
 
         switch (operation)
         {
-            case Common.Enums.OperationEnum.request:
+            case OperationEnum.request:
                 await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
-                Console.WriteLine($"[CREATE] Tópico: {topic}, ID: {payload}");
                 break;
 
-            case Common.Enums.OperationEnum.modify:
-                // index async (update)
-                Console.WriteLine($"[UPDATE] Tópico: {topic}, ID: {payload}");
+            case OperationEnum.modify:
+                await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
                 break;
-
             default:
-                Console.WriteLine($"[IGNORADO] Operación {payload}");
                 break;
         }
 

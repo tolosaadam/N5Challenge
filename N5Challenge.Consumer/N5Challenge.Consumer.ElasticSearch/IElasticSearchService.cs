@@ -10,7 +10,7 @@ namespace N5Challenge.Consumer.ElasticSearch;
 public interface IElasticSearchService
 {
     Task IndexAsync(object entity, string indexName, CancellationToken cancellationToken = default);
-    Task IndexAsync(IEnumerable<Common.Infraestructure.Interfaces.IIndexableEntity> entities, string indexName, CancellationToken cancellationToken = default);
-    void Index(Common.Infraestructure.Interfaces.IIndexableEntity entity, string indexName);
-    void Index(IEnumerable<Common.Infraestructure.Interfaces.IIndexableEntity> entities, string indexName);
+    Task IndexAsync(IEnumerable<object> entities, string indexName, CancellationToken cancellationToken = default);
+    void Index(object entity, string indexName);
+    void Index(IEnumerable<object> entities, string indexName);
 }

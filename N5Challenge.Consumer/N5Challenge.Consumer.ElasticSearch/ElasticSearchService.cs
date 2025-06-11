@@ -25,12 +25,12 @@ public class ElasticSearchService(
         }
     }
 
-    public async Task IndexAsync(IEnumerable<Common.Infraestructure.Interfaces.IIndexableEntity> entities, string indexName, CancellationToken cancellationToken)
+    public async Task IndexAsync(IEnumerable<object> entities, string indexName, CancellationToken cancellationToken)
     {
         var bulkResponse = await _elasticClient
             .BulkAsync(b => b
             .Index(indexName)
-            .IndexMany(entities, (descriptor, entity) => descriptor.Id(entity.Id))
+            .IndexMany(entities)
             .Refresh(Elasticsearch.Net.Refresh.WaitFor), cancellationToken);
 
 
@@ -40,12 +40,11 @@ public class ElasticSearchService(
         }
     }
 
-    public void Index(Common.Infraestructure.Interfaces.IIndexableEntity entity, string indexName)
+    public void Index(object entity, string indexName)
     {
         var indexResponse = _elasticClient
             .Index(entity, i => i
             .Index(indexName)
-            .Id(entity.Id)
             .Refresh(Elasticsearch.Net.Refresh.WaitFor));
 
         if (!indexResponse.IsValid)
@@ -54,12 +53,12 @@ public class ElasticSearchService(
         }
     }
 
-    public void Index(IEnumerable<Common.Infraestructure.Interfaces.IIndexableEntity> entities, string indexName)
+    public void Index(IEnumerable<object> entities, string indexName)
     {
         var bulkResponse = _elasticClient
             .Bulk(b => b
             .Index(indexName)
-            .IndexMany(entities, (descriptor, entity) => descriptor.Id(entity.Id))
+            .IndexMany(entities)
             .Refresh(Elasticsearch.Net.Refresh.WaitFor));
 
 
