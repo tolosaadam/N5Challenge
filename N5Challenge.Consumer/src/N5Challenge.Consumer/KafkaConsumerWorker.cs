@@ -8,6 +8,9 @@ using System.Text.Json;
 using N5Challenge.Consumer.ElasticSearch;
 using Microsoft.Extensions.Options;
 using N5Challenge.Common.Infraestructure.Dictionaries;
+using N5Challenge.Common.Infraestructure.Indexables;
+using N5Challenge.Common.Enums;
+using N5Challenge.Common.Infraestructure;
 
 namespace N5Challenge.Consumer;
 
@@ -70,32 +73,38 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
             return;
         }
 
-        var envelope = JsonSerializer.Deserialize<Common.Infraestructure.KafkaEvent>(json);
+        // Construye KafkaEvent<entityType> dinámicamente
+        var kafkaEventType = typeof(KafkaEvent<>).MakeGenericType(entityType);
 
+        // Deserializa el JSON al tipo correcto
+        var envelope = JsonSerializer.Deserialize(json, kafkaEventType);
         if (envelope == null)
         {
+            Console.WriteLine("No se pudo deserializar el mensaje.");
             return;
         }
+
+        // Obtiene Operation y Payload por reflexión
+        var operation = (OperationEnum)kafkaEventType.GetProperty("Operation")!.GetValue(envelope)!;
+        var payload = kafkaEventType.GetProperty("Payload")!.GetValue(envelope)!;
 
         using var scope = _serviceProvider.CreateScope();
         var elasticService = scope.ServiceProvider.GetRequiredService<IElasticSearchService>();
 
-        dynamic dynEnvelope = envelope;
-
-        switch ((Common.Enums.OperationEnum)dynEnvelope.Operation)
+        switch (operation)
         {
             case Common.Enums.OperationEnum.request:
-                await elasticService.IndexAsync(entity: dynEnvelope.Payload, indexName: topic, cancellationToken: cancellationToken);
-                Console.WriteLine($"[CREATE] Tópico: {topic}, ID: {dynEnvelope.Payload.Id}");
+                await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
+                Console.WriteLine($"[CREATE] Tópico: {topic}, ID: {payload}");
                 break;
 
             case Common.Enums.OperationEnum.modify:
                 // index async (update)
-                Console.WriteLine($"[UPDATE] Tópico: {topic}, ID: {dynEnvelope.Payload.Id}");
+                Console.WriteLine($"[UPDATE] Tópico: {topic}, ID: {payload}");
                 break;
 
             default:
-                Console.WriteLine($"[IGNORADO] Operación {dynEnvelope.Operation}");
+                Console.WriteLine($"[IGNORADO] Operación {payload}");
                 break;
         }
 

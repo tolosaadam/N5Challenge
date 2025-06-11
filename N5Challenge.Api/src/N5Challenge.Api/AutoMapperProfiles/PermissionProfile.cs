@@ -88,6 +88,13 @@ public class PermissionProfile : Profile
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
             .ForMember(dest => dest.PermissionTypeId, opt => opt.MapFrom(src => src.PermissionTypeId));
 
+        _ = CreateMap<IndexablePermission, Domain.Permission>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Convert.ToInt32(src.Id)))
+            .ForMember(dest => dest.EmployeeFirstName, opt => opt.MapFrom(src => src.EmployeeFirstName))
+            .ForMember(dest => dest.EmployeeLastName, opt => opt.MapFrom(src => src.EmployeeLastName))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+            .ForMember(dest => dest.PermissionTypeId, opt => opt.MapFrom(src => src.PermissionTypeId));
+
         //_ = CreateMap<(Domain.Permission permission, int id), IndexablePermission>()
         //    .ConstructUsing(src => new IndexablePermission(src.id.ToString())
         //    {

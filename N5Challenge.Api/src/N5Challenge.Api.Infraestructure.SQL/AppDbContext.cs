@@ -38,8 +38,8 @@ public class AppDbContext : DbContext
             entity.HasKey(pt => pt.Id);
         });
 
-        modelBuilder.Entity<PermissionTypeDB>().HasData(SeedDataConstants.PermissionTypes);
+        modelBuilder.Entity<PermissionTypeDB>().HasData(SeedDataConstants.PermissionTypesDB);
 
-        modelBuilder.Entity<PermissionDB>().HasData(SeedDataConstants.Permissions);
+        modelBuilder.Entity<PermissionDB>().HasData(SeedDataConstants.PermissionsDB);
     }
 }

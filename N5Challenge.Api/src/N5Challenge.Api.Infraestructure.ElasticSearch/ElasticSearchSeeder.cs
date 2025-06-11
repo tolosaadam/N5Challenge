@@ -27,7 +27,7 @@ public class ElasticSearchSeeder(IElasticClient elasticClient, ILogger<ElasticSe
 
             await _elasticClient.Indices.CreateAsync(indexName, ct: cancellationToken);
 
-            var seedData = SeedDataConstants.Permissions;
+            var seedData = SeedDataConstants.IndexablePermissions;
 
             var bulk = await _elasticClient.BulkAsync(b => b
                 .Index(indexName)
@@ -61,7 +61,7 @@ public class ElasticSearchSeeder(IElasticClient elasticClient, ILogger<ElasticSe
 
             await _elasticClient.Indices.CreateAsync(indexName, ct: cancellationToken);
 
-            var seedData = SeedDataConstants.PermissionTypes;
+            var seedData = SeedDataConstants.IndexablePermissionTypes;
 
             var bulk = await _elasticClient.BulkAsync(b => b
                 .Index(indexName)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using N5Challenge.Common.Infraestructure.Indexables;
 using Nest;
 
 namespace N5Challenge.Consumer.ElasticSearch;
@@ -11,12 +12,11 @@ public class ElasticSearchService(
     private readonly IElasticClient _elasticClient = elasticClient;
     private readonly ILogger<ElasticSearchService> _logger = logger;
 
-    public async Task IndexAsync(Common.Infraestructure.Interfaces.IIndexableEntity entity, string indexName, CancellationToken cancellationToken)
+    public async Task IndexAsync(object entity, string indexName, CancellationToken cancellationToken)
     {
         var indexResponse = await _elasticClient
             .IndexAsync(entity, i => i
             .Index(indexName)
-            .Id(entity.Id)
             .Refresh(Elasticsearch.Net.Refresh.WaitFor), cancellationToken);
 
         if (!indexResponse.IsValid)

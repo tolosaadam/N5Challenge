@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Common.Infraestructure.Indexables;
 
-public class IndexableEntity : IIndexableEntity
+public class IndexableEntity : Entity<string>, IIndexableEntity
 {
-    public string Id { get; set; } = default!;
 }

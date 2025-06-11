@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Common.Infraestructure.Interfaces;
 
-public interface IIndexableEntity
+public interface IIndexableEntity : IEntity<string>
 {
-    string Id { get; }
 }

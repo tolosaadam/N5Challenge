@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Infraestructure.Entities;
 using N5Challenge.Common.Constants;
+using N5Challenge.Common.Infraestructure.Indexables;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ public class ElasticPermissionRepository(
     IElasticClient elasticClient,
     ILogger<ElasticPermissionRepository> logger,
     IElasticPermissionTypeRepository permissionTypeRepository) 
-    : ElasticSearchRepository<Domain.Permission, PermissionDB, int>(autoMapper, elasticClient, logger),
+    : ElasticSearchRepository<Domain.Permission, int, IndexablePermission, string>(autoMapper, elasticClient, logger),
     IElasticPermissionRepository
 {
     protected override string IndexName => EntityRawNameConstants.PERMISSIONS;

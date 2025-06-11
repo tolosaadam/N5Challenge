@@ -3,28 +3,31 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
-using N5Challenge.Api.Infraestructure.Entities;
+using N5Challenge.Common.Infraestructure;
 using Nest;
 using System.Security.Cryptography;
 using System.Threading;
 
 namespace N5Challenge.Api.Infraestructure.ElasticSearch;
-public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
+public abstract class ElasticSearchRepository<TDomainModel, TDomainId, TEntityModel, TEntityId>(
     IMapper autoMapper,
     IElasticClient elasticClient,
-    ILogger<ElasticSearchRepository<TDomainModel, TEntityModel, TId>> logger) : Repository<TDomainModel, TEntityModel, TId>(autoMapper),
-    IReadRepository<TDomainModel, TId>
-    where TEntityModel : class, IEntity<TId>
-    where TDomainModel : class, IDomainEntity<TId>
+    ILogger<ElasticSearchRepository<TDomainModel, TDomainId, TEntityModel, TEntityId>> logger) 
+    : Repository<TDomainModel, TDomainId, TEntityModel, TEntityId>(autoMapper),
+    IReadRepository<TDomainModel, TDomainId>
+    where TEntityModel : class, IEntity<TEntityId>
+    where TDomainModel : class, IDomainEntity<TDomainId>
 {
     private readonly IElasticClient _elasticClient = elasticClient;
     protected abstract string IndexName { get; }
-    private readonly ILogger<ElasticSearchRepository<TDomainModel, TEntityModel, TId>> _logger = logger;
+    private readonly ILogger<ElasticSearchRepository<TDomainModel, TDomainId, TEntityModel, TEntityId>> _logger = logger;
 
     public virtual IEnumerable<TDomainModel> GetAll()
     {
         var response = _elasticClient.Search<TEntityModel>(s => s
         .Index(IndexName)
+        .From(0)
+        .Size(100)
         .Query(q => q.MatchAll()));
 
         if (!response.IsValid)
@@ -40,6 +43,8 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
     {
         var response = await _elasticClient.SearchAsync<TEntityModel>(s => s
         .Index(IndexName)
+        .From(0)
+        .Size(100)
         .Query(q => q.MatchAll()),
         cancellationToken);
 
@@ -52,7 +57,7 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
         return MapToDomainModel(response.Documents);
     }
 
-    public virtual TDomainModel? GetById(TId id)
+    public virtual TDomainModel? GetById(TDomainId id)
     {
         var response = _elasticClient.Get<TEntityModel>(id!.ToString(), g => g.Index(IndexName));
 
@@ -65,7 +70,7 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
         return MapToDomainModel(response.Source);
     }
 
-    public virtual async Task<TDomainModel?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
+    public virtual async Task<TDomainModel?> GetByIdAsync(TDomainId id, CancellationToken cancellationToken = default)
     {
         var response = await _elasticClient.GetAsync<TEntityModel>(id!.ToString(), g => g.Index(IndexName), cancellationToken);
 
@@ -77,59 +82,4 @@ public abstract class ElasticSearchRepository<TDomainModel, TEntityModel, TId>(
 
         return MapToDomainModel(response.Source);
     }
-    public virtual async Task<Func<TId>> AddAsync(TDomainModel entity, CancellationToken cancellationToken)
-    {
-        var doc = MapToEntityModel(entity);
-        var response = await _elasticClient.IndexAsync(doc, i => i
-            .Index(IndexName)
-            .Id(entity.Id!.ToString())
-            .Refresh(Elasticsearch.Net.Refresh.True), cancellationToken);
-
-        if (!response.IsValid)
-            throw new InvalidOperationException($"Failed to add document to index {IndexName}: {response.ServerError?.Error?.Reason}");
-
-        return () => entity.Id;
-    }
-
-    //public async Task IndexAsync(IEnumerable<IIndexableEntity> entities, string indexName, CancellationToken cancellationToken)
-    //{
-    //    var bulkResponse = await _elasticClient
-    //        .BulkAsync(b => b
-    //        .Index(indexName ?? _defaultIndexName)
-    //        .IndexMany(entities, (descriptor, entity) => descriptor.Id(entity.Id)),
-    //        cancellationToken);
-
-
-    //    if (bulkResponse.Errors)
-    //    {
-    //        _logger.LogWarning("Error indexing bulk documents. Entities: {@Entities}, Index: {IndexName}", entities, indexName);
-    //    }
-    //}
-
-    //public void Index(IIndexableEntity entity, string indexName)
-    //{
-    //    var indexResponse = _elasticClient
-    //        .Index(entity, i => i
-    //        .Index(indexName ?? _defaultIndexName)
-    //        .Id(entity.Id));
-
-    //    if (!indexResponse.IsValid)
-    //    {
-    //        _logger.LogWarning("Error indexing document. Entity: {@Entity}, Index: {IndexName}", entity, indexName);
-    //    }
-    //}
-
-    //public void Index(IEnumerable<IIndexableEntity> entities, string indexName)
-    //{
-    //    var bulkResponse = _elasticClient
-    //        .Bulk(b => b
-    //        .Index(indexName ?? _defaultIndexName)
-    //        .IndexMany(entities, (descriptor, entity) => descriptor.Id(entity.Id)));
-
-
-    //    if (bulkResponse.Errors)
-    //    {
-    //        _logger.LogWarning("Error indexing bulk documents. Entities: {@Entities}, Index: {IndexName}", entities, indexName);
-    //    }
-    //}
 }

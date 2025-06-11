@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Common.Enums;
 using N5Challenge.Common.Infraestructure;
+using N5Challenge.Common.Infraestructure.Dictionaries;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -66,18 +67,14 @@ public class KafkaProducer : IKafkaProducer
 
             var mapped = _autoMapper.Map(entity, entity!.GetType(), targetType);
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
+            // Crear tipo KafkaEvent<T> dinámicamente
+            var kafkaEventType = typeof(KafkaEvent<>).MakeGenericType(targetType);
+            var envelope = Activator.CreateInstance(kafkaEventType);
+            kafkaEventType.GetProperty("Operation")!.SetValue(envelope, operation);
+            kafkaEventType.GetProperty("Payload")!.SetValue(envelope, mapped);
 
-            var envelope = new KafkaEvent
-            {
-                Operation = operation,
-                Payload = mapped
-            };
-
-            var json = JsonSerializer.Serialize(envelope, envelope.GetType(), new JsonSerializerOptions
+            // Serializar usando el tipo dinámico
+            var json = JsonSerializer.Serialize(envelope, kafkaEventType, new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             });

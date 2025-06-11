@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Common.Infraestructure;
 
-public class KafkaEvent
+public class KafkaEvent<T>
 {
     public OperationEnum Operation { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public object Payload { get; set; } = default!;
+    public T Payload { get; set; } = default!;
 }

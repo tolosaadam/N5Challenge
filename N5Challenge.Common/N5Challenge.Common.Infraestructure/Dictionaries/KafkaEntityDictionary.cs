@@ -18,6 +18,6 @@ public static class KafkaEntityDictionary
 
     public static Type? GetEntityTypeFromTopic(string topic)
     {
-        return KafkaEntityDictionary.TopicToEntityMap.TryGetValue(topic, out var type) ? type : null;
+        return TopicToEntityMap.TryGetValue(topic, out var type) ? type : null;
     }
 }
