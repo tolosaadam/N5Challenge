@@ -27,29 +27,28 @@ public record UpdatePermissionCommand(
 public class UpdatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionRepository elasticPermissionRepository,
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository)
     : IRequestHandler<UpdatePermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
-
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
 
     public async Task Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
 
         var pRepository = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
 
-        var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
+        var permission = await _elasticPermissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (permission is null)
         {
             throw new EntityNotFoundException(nameof(Domain.Permission), request.Id);
         }
 
-        var ptRepository = _unitOfWork.GetEfRepository<IEfPermissionTypeRepository>();
-
-        var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
+        var ptDomain = await _elasticPermissionTypeRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
 
         if (ptDomain is null)
         {
@@ -64,10 +63,5 @@ public class UpdatePermissionCommandHandler(
         var updatedP = pRepository.Update(pToUpdate);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        #region ElasticSearch
-        var indexablePermission = _autoMapper.Map<IndexablePermission>(updatedP);
-        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
     }
 }

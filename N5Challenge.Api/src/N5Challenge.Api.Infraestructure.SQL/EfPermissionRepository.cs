@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Infraestructure.SQL;
 
-public class EfPermissionRepository(AppDbContext context, IMapper autoMapper)
+public class EfPermissionRepository(
+    AppDbContext context,
+    IMapper autoMapper)
     : EfRepository<Domain.Permission, PermissionDB, int>(autoMapper), IEfPermissionRepository
 {
     protected override DbSet<PermissionDB> DbSet => context.Set<PermissionDB>();

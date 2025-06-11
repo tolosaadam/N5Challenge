@@ -78,19 +78,17 @@ public static class ServicesCollectionExtensions
 
     public static IServiceCollection AddElasticSearchSettings(this IServiceCollection services, IConfiguration configuration)
     {
-
-        services.Configure<ElasticSearchSettings>(configuration.GetSection("ElasticSearch"));
-
-        var settings = new ConnectionSettings(new Uri(configuration["ElasticSearch:Url"]))
+        var settings = new ConnectionSettings(new Uri(configuration["ElasticSearch:Url"]!))
         .DisableDirectStreaming()
-        .EnableApiVersioningHeader()
-        .DefaultIndex(configuration["ElasticSearch:IndexName"]);
+        .EnableApiVersioningHeader();
 
         var elasticClient = new ElasticClient(settings);
 
+        services.AddSingleton<ElasticSearchSeeder>();
         services.AddSingleton<IElasticClient>(elasticClient);
 
-        services.AddScoped(typeof(IElasticSearch), typeof(ElasticSearch));
+        services.AddScoped<IElasticPermissionRepository, ElasticPermissionRepository>();
+        services.AddScoped<IElasticPermissionTypeRepository, ElasticPermissionTypeRepository>();
         return services;
     }
 

@@ -27,20 +27,20 @@ public record UpdatePartialPermissionCommand(
 public class UpdatePartialPermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionRepository elasticPermissionRepository,
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository)
     : IRequestHandler<UpdatePartialPermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
-
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
 
     public async Task Handle(UpdatePartialPermissionCommand request, CancellationToken cancellationToken)
     {
-
         var pRepository = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
 
-        var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
+        var permission = await _elasticPermissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (permission is null)
         {
@@ -49,10 +49,7 @@ public class UpdatePartialPermissionCommandHandler(
 
         if (request.PermissionTypeId is not null)
         {
-            var ptRepository = _unitOfWork.GetEfRepository<IEfPermissionTypeRepository>();
-
-
-            var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId.Value, cancellationToken);
+            var ptDomain = await _elasticPermissionTypeRepository.GetByIdAsync(request.PermissionTypeId.Value, cancellationToken);
 
             if (ptDomain is null)
             {
@@ -68,10 +65,5 @@ public class UpdatePartialPermissionCommandHandler(
         var updatedP = pRepository.Update(permission);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        #region ElasticSearch
-        var indexablePermission = _autoMapper.Map<IndexablePermission>(updatedP);
-        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
     }
 }

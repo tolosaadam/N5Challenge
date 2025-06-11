@@ -15,30 +15,19 @@ namespace N5Challenge.Api.Application.Permission.Queries.GetAll;
 public record GetAllPermissionQuery() : IRequest<IEnumerable<Domain.Permission>>, IPublishEvent
 {
     public OperationEnum Operation => OperationEnum.get;
-
     public string Topic => "permission";
 }
 
 public class GetAllPermissionQueryHandler(
-    IUnitOfWork unitOfWork,
-    IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionRepository elasticPermissionRepository)
     : IRequestHandler<GetAllPermissionQuery, IEnumerable<Domain.Permission>>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
 
     public async Task<IEnumerable<Domain.Permission>> Handle(GetAllPermissionQuery request, CancellationToken cancellationToken)
     {
-        var repo = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
-        var permissions = await repo.GetAllAsync(true, cancellationToken);
+        var result = await _elasticPermissionRepository.GetAllAsync(cancellationToken);
 
-        #region ElasticSearch
-        var indexablePermissions = _autoMapper.Map<IEnumerable<IndexablePermission>>(permissions);
-        await _elasticSearch.IndexAsync(indexablePermissions, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
-
-        return permissions;
+        return result;
     }
 }

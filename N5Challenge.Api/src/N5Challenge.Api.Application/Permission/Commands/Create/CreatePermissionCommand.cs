@@ -5,6 +5,7 @@ using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
+using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -27,18 +28,18 @@ public record CreatePermissionCommand(
 public class CreatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository,
+    IElasticPermissionRepository elasticPermissionRepository)
     : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
-        var ptRepository = _unitOfWork.GetEfRepository<IEfPermissionTypeRepository>();
-
-        var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
+        var ptDomain = await _elasticPermissionTypeRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
 
         if (ptDomain is null)
         {
@@ -60,10 +61,8 @@ public class CreatePermissionCommandHandler(
 
         var id = getId();
 
-        #region ElasticSearch
-        var indexablePermission = _autoMapper.Map<IndexablePermission>((pDomain, id));
-        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
+        pDomain.Id = id;
+        var result = await _elasticPermissionRepository.AddAsync(pDomain, cancellationToken);
 
         return id;
     }

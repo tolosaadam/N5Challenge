@@ -9,7 +9,6 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IEfPermissionRepository : 
     IEfRepository,
-    IReadRepository<Domain.Permission, int>,
     IWriteRepository<Domain.Permission, int>
 {
     Task<IEnumerable<Domain.Permission>> GetAllAsync(bool includeType, CancellationToken cancellationToken = default);
