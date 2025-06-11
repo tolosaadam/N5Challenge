@@ -1,5 +1,4 @@
-﻿using N5Challenge.Common.Infraestructure.Indexables;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

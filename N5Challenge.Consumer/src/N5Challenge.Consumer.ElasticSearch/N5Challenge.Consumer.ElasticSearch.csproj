@@ -11,8 +11,4 @@
     <PackageReference Include="NEST" Version="7.17.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\N5Challenge.Common\N5Challenge.Common.Infraestructure\N5Challenge.Common.Infraestructure.csproj" />
-  </ItemGroup>
-
 </Project>

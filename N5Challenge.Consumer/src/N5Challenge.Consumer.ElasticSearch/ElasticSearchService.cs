@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using N5Challenge.Common.Infraestructure.Indexables;
 using Nest;
 
 namespace N5Challenge.Consumer.ElasticSearch;

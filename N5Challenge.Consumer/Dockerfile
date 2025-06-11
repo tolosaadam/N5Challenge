@@ -10,16 +10,20 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["N5Challenge.Consumer/N5Challenge.Consumer.csproj", "N5Challenge.Consumer/"]
-RUN dotnet restore "./N5Challenge.Consumer/N5Challenge.Consumer.csproj"
+COPY ["N5Challenge.Consumer/src/N5Challenge.Consumer/N5Challenge.Consumer.csproj", "N5Challenge.Consumer/src/N5Challenge.Consumer/"]
+COPY ["N5Challenge.Consumer/src/N5Challenge.Consumer.ElasticSearch/N5Challenge.Consumer.ElasticSearch.csproj", "N5Challenge.Consumer/src/N5Challenge.Consumer.ElasticSearch/"]
+COPY ["N5Challenge.Common/N5Challenge.Common/N5Challenge.Common.csproj", "N5Challenge.Common/N5Challenge.Common/"]
+COPY ["N5Challenge.Common/N5Challenge.Common.Infraestructure/N5Challenge.Common.Infraestructure.csproj", "N5Challenge.Common/N5Challenge.Common.Infraestructure/"]
+
+RUN dotnet restore "N5Challenge.Consumer/src/N5Challenge.Consumer/N5Challenge.Consumer.csproj"
 COPY . .
-WORKDIR "/src/N5Challenge.Consumer"
-RUN dotnet build "./N5Challenge.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/N5Challenge.Consumer/src/N5Challenge.Consumer"
+RUN dotnet build "N5Challenge.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./N5Challenge.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "N5Challenge.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final

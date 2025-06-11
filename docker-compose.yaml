@@ -144,6 +144,21 @@ services:
     networks:
       - backend
 
+  consumer:
+    build:
+      context: .
+      dockerfile: N5Challenge.Consumer/Dockerfile
+    container_name: n5challenge-consumer
+    depends_on:
+      - kafka
+      - elasticsearch
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ElasticConfiguration__Uri=http://elasticsearch:9200
+      - Kafka__BootstrapServers=kafka:29092
+    networks:
+      - backend
+
 volumes:
   sqlserverdata:
   elasticsearch-data:

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using System.Text.Json;
-using N5Challenge.Consumer.ElasticSearch;
 using Microsoft.Extensions.Options;
 using N5Challenge.Common.Infraestructure.Dictionaries;
 using N5Challenge.Common.Infraestructure.Indexables;
@@ -89,14 +88,13 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
         var payload = kafkaEventType.GetProperty("Payload")!.GetValue(envelope)!;
 
         using var scope = _serviceProvider.CreateScope();
-        var elasticService = scope.ServiceProvider.GetRequiredService<IElasticSearchService>();
+        var elasticService = scope.ServiceProvider.GetRequiredService<ElasticSearch.IElasticSearchService>();
 
         switch (operation)
         {
             case OperationEnum.request:
                 await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
                 break;
-
             case OperationEnum.modify:
                 await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
                 break;
