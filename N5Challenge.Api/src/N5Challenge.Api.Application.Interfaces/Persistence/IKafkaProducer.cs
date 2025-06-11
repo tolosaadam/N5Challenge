@@ -1,4 +1,4 @@
-﻿using N5Challenge.Api.Domain.Enums;
+﻿using N5Challenge.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +10,5 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 public interface IKafkaProducer
 {
     Task PublishAuditableEventAsync(string topic, OperationEnum operation, CancellationToken cancellationToken = default);
-    Task PublishEventAsync<TDomainModel>(string topic, TDomainModel entity, OperationEnum operation, CancellationToken cancellationToken = default);
+    Task PublishEntityEventAsync<TDomainModel>(string topic, TDomainModel entity, OperationEnum operation, CancellationToken cancellationToken = default);
 }

@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using System.Text.Json;
 using N5Challenge.Consumer.ElasticSearch;
-using N5Challenge.Consumer.Domain.Models;
-using N5Challenge.Consumer.Domain.Models.Enums;
-using N5Challenge.Consumer.Domain.Models.Dictionaries;
 using Microsoft.Extensions.Options;
-using N5Challenge.Consumer.Domain.Models.Config;
+using N5Challenge.Common.Infraestructure.Dictionaries;
 
 namespace N5Challenge.Consumer;
 
-public class KafkaConsumerBackgroundService(IOptions<KafkaSettings> kpSettings, IServiceProvider serviceProvider) : BackgroundService
+public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSettings, IServiceProvider serviceProvider) : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
@@ -66,15 +63,15 @@ public class KafkaConsumerBackgroundService(IOptions<KafkaSettings> kpSettings, 
 
     private async Task ProcessMessageAsync(string topic, string json, CancellationToken cancellationToken)
     {
-        var entityType = GetEntityTypeFromTopic(topic);
+        var entityType = KafkaEntityDictionary.GetEntityTypeFromTopic(topic);
         if (entityType is null)
         {
             Console.WriteLine($"Tipo no mapeado para el tópico '{topic}'");
             return;
         }
 
-        var envelopeType = typeof(KafkaEnvelope<,>).MakeGenericType(entityType, typeof(int));
-        var envelope = JsonSerializer.Deserialize(json, envelopeType);
+        var envelope = JsonSerializer.Deserialize<Common.Infraestructure.KafkaEvent>(json);
+
         if (envelope == null)
         {
             return;
@@ -85,14 +82,14 @@ public class KafkaConsumerBackgroundService(IOptions<KafkaSettings> kpSettings, 
 
         dynamic dynEnvelope = envelope;
 
-        switch ((OperationEnum)dynEnvelope.Operation)
+        switch ((Common.Enums.OperationEnum)dynEnvelope.Operation)
         {
-            case OperationEnum.request:
+            case Common.Enums.OperationEnum.request:
                 await elasticService.IndexAsync(entity: dynEnvelope.Payload, indexName: topic, cancellationToken: cancellationToken);
                 Console.WriteLine($"[CREATE] Tópico: {topic}, ID: {dynEnvelope.Payload.Id}");
                 break;
 
-            case OperationEnum.modify:
+            case Common.Enums.OperationEnum.modify:
                 // index async (update)
                 Console.WriteLine($"[UPDATE] Tópico: {topic}, ID: {dynEnvelope.Payload.Id}");
                 break;
@@ -103,10 +100,5 @@ public class KafkaConsumerBackgroundService(IOptions<KafkaSettings> kpSettings, 
         }
 
         await Task.CompletedTask;
-    }
-
-    private static Type? GetEntityTypeFromTopic(string topic)
-    {
-        return KafkaEntityDictionary.TopicToEntityMap.TryGetValue(topic, out var type) ? type : null;
     }
 }

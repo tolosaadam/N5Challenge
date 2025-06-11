@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Infraestructure.Entities;
+using N5Challenge.Common.Constants;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ public class ElasticPermissionRepository(
     : ElasticSearchRepository<Domain.Permission, PermissionDB, int>(autoMapper, elasticClient, logger),
     IElasticPermissionRepository
 {
-    protected override string IndexName => EntityRawNameConstans.PERMISSIONS;
+    protected override string IndexName => EntityRawNameConstants.PERMISSIONS;
     private readonly IElasticPermissionTypeRepository _permissionTypeRepository = permissionTypeRepository;
 
     public async Task<IEnumerable<Domain.Permission>> GetAllAsync(bool include = false, CancellationToken cancellationToken = default)

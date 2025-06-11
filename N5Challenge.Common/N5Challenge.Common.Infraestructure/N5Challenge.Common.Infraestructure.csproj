@@ -8,12 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\N5Challenge.Common\N5Challenge.Common\N5Challenge.Common.csproj" />
-    <ProjectReference Include="..\N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj" />
+    <ProjectReference Include="..\N5Challenge.Common\N5Challenge.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,8 +2,8 @@
 using MediatR;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain.Constants;
-using N5Challenge.Api.Domain.Enums;
+using N5Challenge.Common.Constants;
+using N5Challenge.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +17,10 @@ public record UpdatePartialPermissionCommand(
     string? EmployeeFirstName,
     string? EmployeeLastName,
     int? PermissionTypeId,
-    DateTime? Date) : IRequest, ICommand, IPublishEvent, IValidate
+    DateTime? Date) : IRequest, ICommand, IPublishAuditableEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.modify;
-    public string Topic => EntityRawNameConstans.PERMISSIONS;
+    public string Topic => EntityRawNameConstants.PERMISSIONS;
 }
 
 public class UpdatePartialPermissionCommandHandler(
@@ -67,6 +67,6 @@ public class UpdatePartialPermissionCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _kafkaProducer.PublishEventAsync(request.Topic, updatedP, request.Operation, cancellationToken);
+        await _kafkaProducer.PublishEntityEventAsync(request.Topic, updatedP, request.Operation, cancellationToken);
     }
 }

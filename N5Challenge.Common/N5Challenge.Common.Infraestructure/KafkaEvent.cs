@@ -1,16 +1,16 @@
-﻿using N5Challenge.Api.Domain.Enums;
+﻿using N5Challenge.Common.Enums;
+using N5Challenge.Common.Infraestructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure.Services.Kafka;
+namespace N5Challenge.Common.Infraestructure;
 
-public class KafkaEnvelope<T>
+public class KafkaEvent
 {
     public OperationEnum Operation { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public T Payload { get; set; } = default!;
+    public object Payload { get; set; } = default!;
 }
-

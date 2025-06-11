@@ -16,8 +16,4 @@
     <ProjectReference Include="..\N5Challenge.Api.Infraestructure\N5Challenge.Api.Infraestructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Constants\" />
-  </ItemGroup>
-
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Infraestructure.Constants;
 using N5Challenge.Api.Infraestructure.Entities;
+using N5Challenge.Common.Constants;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ public class ElasticSearchSeeder
 
     public async Task SeedPermissionsAsync(CancellationToken cancellationToken = default)
     {
-        var indexName = EntityRawNameConstans.PERMISSIONS;
+        var indexName = EntityRawNameConstants.PERMISSIONS;
 
         var exists = await _elasticClient.Indices.ExistsAsync(indexName, ct: cancellationToken);
         if (!exists.Exists)
@@ -58,7 +58,7 @@ public class ElasticSearchSeeder
 
     public async Task SeedPermissionTypesAsync(CancellationToken cancellationToken = default)
     {
-        var indexName = EntityRawNameConstans.PERMISSION_TYPES;
+        var indexName = EntityRawNameConstants.PERMISSION_TYPES;
 
         var exists = await _elasticClient.Indices.ExistsAsync(indexName, ct: cancellationToken);
         if (!exists.Exists)

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain.Enums;
+using N5Challenge.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.PermissionType.Queries.GetAll;
 
-public record GetAllPermissionTypeQuery() : IRequest<IEnumerable<Domain.PermissionType>>, IPublishEvent
+public record GetAllPermissionTypeQuery() : IRequest<IEnumerable<Domain.PermissionType>>, IPublishAuditableEvent
 {
     public OperationEnum Operation => OperationEnum.get;
 

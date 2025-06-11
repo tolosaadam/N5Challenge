@@ -1,27 +1,24 @@
 ﻿using AutoMapper;
 using MediatR;
-using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Permission.Queries.GetAll;
-using N5Challenge.Api.Domain.Constants;
-using N5Challenge.Api.Domain.Enums;
+using N5Challenge.Common.Constants;
+using N5Challenge.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace N5Challenge.Api.Application.Permission.Commands.Create;
 
 public record CreatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
-    int PermissionTypeId) : IRequest<int>, ICommand, IPublishEvent, IValidate
+    int PermissionTypeId) : IRequest<int>, ICommand, IPublishAuditableEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.request;
-    public string Topic => EntityRawNameConstans.PERMISSIONS;
+    public string Topic => EntityRawNameConstants.PERMISSIONS;
 }
 
 public class CreatePermissionCommandHandler(
@@ -64,7 +61,7 @@ public class CreatePermissionCommandHandler(
 
         pDomain.Id = id;
 
-        await _kafkaProducer.PublishEventAsync(request.Topic, pDomain, request.Operation, cancellationToken);
+        await _kafkaProducer.PublishEntityEventAsync(request.Topic, pDomain, request.Operation, cancellationToken);
 
         return id;
     }

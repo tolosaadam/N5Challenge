@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -15,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\N5Challenge.Consumer.Domain\N5Challenge.Consumer.Domain.csproj" />
+    <ProjectReference Include="..\..\..\N5Challenge.Common\N5Challenge.Common.Infraestructure\N5Challenge.Common.Infraestructure.csproj" />
+    <ProjectReference Include="..\..\..\N5Challenge.Common\N5Challenge.Common\N5Challenge.Common.csproj" />
     <ProjectReference Include="..\..\N5Challenge.Consumer.ElasticSearch\N5Challenge.Consumer.ElasticSearch.csproj" />
   </ItemGroup>
 </Project>

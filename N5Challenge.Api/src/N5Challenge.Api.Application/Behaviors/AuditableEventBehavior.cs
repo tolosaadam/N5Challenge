@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace N5Challenge.Api.Application.Behaviors;
 
 public class AuditableEventBehavior<TRequest, TResponse>(IKafkaProducer producer) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IPublishEvent
+    where TRequest : IPublishAuditableEvent
 {
     private readonly IKafkaProducer _producer = producer;
 

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Infraestructure.Entities;
+using N5Challenge.Common.Constants;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -19,5 +19,5 @@ public class ElasticPermissionTypeRepository(
     : ElasticSearchRepository<Domain.PermissionType, PermissionTypeDB, int>(autoMapper, elasticClient, logger),
     IElasticPermissionTypeRepository
 {
-    protected override string IndexName => EntityRawNameConstans.PERMISSION_TYPES;
+    protected override string IndexName => EntityRawNameConstants.PERMISSION_TYPES;
 }

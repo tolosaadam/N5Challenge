@@ -1,10 +1,11 @@
-﻿using Confluent.Kafka;
+﻿using AutoMapper;
+using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Domain;
-using N5Challenge.Api.Domain.Enums;
-using System.Runtime;
+using N5Challenge.Common.Enums;
+using N5Challenge.Common.Infraestructure;
+using N5Challenge.Common.Infraestructure.Dictionaries;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,11 +15,11 @@ public class KafkaProducer : IKafkaProducer
 {
     private readonly IProducer<string, string> _producer;
     private readonly ILogger<KafkaProducer> _logger;
-
-    public KafkaProducer(IOptions<KafkaSettings> kpSettings, ILogger<KafkaProducer> logger)
+    private readonly IMapper _autoMapper;
+    public KafkaProducer(IOptions<KafkaSettings> kpSettings, ILogger<KafkaProducer> logger, IMapper autoMapper)
     {
         _logger = logger;
-
+        _autoMapper = autoMapper;
         var config = new ProducerConfig
         {
             BootstrapServers = kpSettings.Value.BootstrapServers,
@@ -51,7 +52,7 @@ public class KafkaProducer : IKafkaProducer
         }
     }
 
-    public async Task PublishEventAsync<TDomainModel>(
+    public async Task PublishEntityEventAsync<TDomainModel>(
         string topic,
         TDomainModel entity,
         OperationEnum operation,
@@ -59,18 +60,28 @@ public class KafkaProducer : IKafkaProducer
     {
         try
         {
-            var envelope = new KafkaEnvelope<TDomainModel>
-            {
-                Operation = operation,
-                Payload = entity
-            };
+            var targetType = KafkaEntityDictionary.GetEntityTypeFromTopic(topic);
+
+            if (targetType == null)
+                throw new InvalidOperationException($"No IndexableEntity type found for topic '{topic}'");
+
+            var mapped = _autoMapper.Map(entity, entity!.GetType(), targetType);
 
             var options = new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
-            var json = JsonSerializer.Serialize(envelope, options);
+            var envelope = new KafkaEvent
+            {
+                Operation = operation,
+                Payload = mapped
+            };
+
+            var json = JsonSerializer.Serialize(envelope, envelope.GetType(), new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            });
 
             var result = await _producer.ProduceAsync(topic, new Message<string, string>
             {
