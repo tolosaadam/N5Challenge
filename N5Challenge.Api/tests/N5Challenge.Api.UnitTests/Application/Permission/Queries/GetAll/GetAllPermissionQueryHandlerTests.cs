@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using System;
 using System.Collections.Generic;
@@ -17,24 +14,15 @@ namespace N5Challenge.Api.UnitTests.Application.Permission.Queries.GetAll;
 [TestClass]
 public class GetAllPermissionQueryHandlerTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IPermissionRepository> _pRepositoryMock = new();
-    private readonly Mock<IMapper> _autoMapperMock = new();
-    private readonly Mock<IElasticSearch> _elasticMock = new();
+    private readonly Mock<IElasticPermissionRepository> _elasticPRepositoryMock = new();
 
     private GetAllPermissionQueryHandler _handler = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionRepository>())
-            .Returns(_pRepositoryMock.Object);
-
         _handler = new GetAllPermissionQueryHandler(
-            _unitOfWorkMock.Object,
-            _autoMapperMock.Object,
-            _elasticMock.Object
+            _elasticPRepositoryMock.Object
         );
     }
 
@@ -50,23 +38,9 @@ public class GetAllPermissionQueryHandlerTests
             new() { Id = 2 }
         };
 
-        var indexablePermissions = new List<IndexablePermission>
-        {
-            new("1"),
-            new("2")
-        };
-
-        _pRepositoryMock
+        _elasticPRepositoryMock
             .Setup(r => r.GetAllAsync(true, cancellationToken))
             .ReturnsAsync(permissions);
-
-        _autoMapperMock
-            .Setup(m => m.Map<IEnumerable<IndexablePermission>>(permissions))
-            .Returns(indexablePermissions);
-
-        _elasticMock
-            .Setup(e => e.IndexAsync(indexablePermissions, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken))
-            .Returns(Task.CompletedTask);
 
         var query = new GetAllPermissionQuery();
 

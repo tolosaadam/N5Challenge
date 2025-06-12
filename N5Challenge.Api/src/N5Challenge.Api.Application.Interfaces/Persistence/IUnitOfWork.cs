@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
-public interface IUnitOfWork : IRepositoryFactory, IDisposable, IAsyncDisposable
+public interface IUnitOfWork : IEfRepositoryFactory, IDisposable, IAsyncDisposable
 {
     int SaveChanges();
     Task SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Domain;
 
-public class PermissionType : Entity<int>
+public class PermissionType : DomainEntity<int>
 {
     public string? Description { get; set; }
 }

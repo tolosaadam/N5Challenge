@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using N5Challenge.Api.Application.Models;
-using N5Challenge.Api.Domain;
+using N5Challenge.Api.Infraestructure.Entities;
+using N5Challenge.Api.Infraestructure.Indexables;
 
 namespace N5Challenge.Api.AutoMapperProfiles;
 
@@ -71,28 +71,38 @@ public class PermissionProfile : Profile
         #region Repository
 
         _ = CreateMap<Domain.Permission,
-            Infraestructure.SQL.Entities.PermissionDB>()
+            PermissionDB>()
             .ForMember(dest => dest.Type, opt => opt.Ignore());
 
-        _ = CreateMap<Infraestructure.SQL.Entities.PermissionDB,
+        _ = CreateMap<PermissionDB,
            Domain.Permission>();
 
         #endregion
 
         #region ElasticSearch
 
-        _ = CreateMap<Domain.Permission,
-            IndexablePermission>()
-            .ForMember(src => src.Id, opt => opt.MapFrom(opt => opt.Id.ToString()));
+        _ = CreateMap<Domain.Permission, IndexablePermission>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+            .ForMember(dest => dest.EmployeeFirstName, opt => opt.MapFrom(src => src.EmployeeFirstName))
+            .ForMember(dest => dest.EmployeeLastName, opt => opt.MapFrom(src => src.EmployeeLastName))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+            .ForMember(dest => dest.PermissionTypeId, opt => opt.MapFrom(src => src.PermissionTypeId));
 
-        _ = CreateMap<(Domain.Permission permission, int id), IndexablePermission>()
-            .ConstructUsing(src => new IndexablePermission(src.id.ToString())
-            {
-                EmployeeFirstName = src.permission.EmployeeFirstName,
-                EmployeeLastName = src.permission.EmployeeLastName,
-                Date = src.permission.Date,
-                PermissionTypeId = src.permission.PermissionTypeId
-            });
+        _ = CreateMap<IndexablePermission, Domain.Permission>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Convert.ToInt32(src.Id)))
+            .ForMember(dest => dest.EmployeeFirstName, opt => opt.MapFrom(src => src.EmployeeFirstName))
+            .ForMember(dest => dest.EmployeeLastName, opt => opt.MapFrom(src => src.EmployeeLastName))
+            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+            .ForMember(dest => dest.PermissionTypeId, opt => opt.MapFrom(src => src.PermissionTypeId));
+
+        //_ = CreateMap<(Domain.Permission permission, int id), IndexablePermission>()
+        //    .ConstructUsing(src => new IndexablePermission(src.id.ToString())
+        //    {
+        //        EmployeeFirstName = src.permission.EmployeeFirstName,
+        //        EmployeeLastName = src.permission.EmployeeLastName,
+        //        Date = src.permission.Date,
+        //        PermissionTypeId = src.permission.PermissionTypeId
+        //    });
 
         #endregion
 

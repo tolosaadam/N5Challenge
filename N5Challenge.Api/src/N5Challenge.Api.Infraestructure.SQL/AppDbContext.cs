@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using N5Challenge.Api.Infraestructure.SQL.Entities;
+using N5Challenge.Api.Infraestructure.Constants;
+using N5Challenge.Api.Infraestructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,25 +38,8 @@ public class AppDbContext : DbContext
             entity.HasKey(pt => pt.Id);
         });
 
-        modelBuilder.Entity<PermissionTypeDB>().HasData(
-        new PermissionTypeDB { Id = 1, Description = "Permiso 1" },
-        new PermissionTypeDB { Id = 2, Description = "Permiso 2" },
-        new PermissionTypeDB { Id = 3, Description = "Permiso 3" });
+        modelBuilder.Entity<PermissionTypeDB>().HasData(SeedDataConstants.PermissionTypesDB);
 
-        modelBuilder.Entity<PermissionDB>().HasData(
-            new PermissionDB
-            {
-                Id = 1,
-                EmployeeLastName = "Tolosa",
-                EmployeeFirstName = "Adam",
-                PermissionTypeId = 1
-            },
-            new PermissionDB
-            {
-                Id = 2,
-                EmployeeLastName = "Adam",
-                EmployeeFirstName = "Tolosa",
-                PermissionTypeId = 2
-            });
+        modelBuilder.Entity<PermissionDB>().HasData(SeedDataConstants.PermissionsDB);
     }
 }

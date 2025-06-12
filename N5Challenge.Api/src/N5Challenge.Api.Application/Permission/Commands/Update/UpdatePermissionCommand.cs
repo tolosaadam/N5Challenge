@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -18,38 +17,39 @@ public record UpdatePermissionCommand(
     string EmployeeFirstName,
     string EmployeeLastName,
     int PermissionTypeId,
-    DateTime Date) : IRequest, ICommand, IPublishEvent, IValidate
+    DateTime Date) : IRequest, ICommand, IPublishAuditableEvent, IValidate
 {
     public OperationEnum Operation => OperationEnum.modify;
-    public string Topic => "permission";
+    public string Topic => EntityRawNameConstants.PERMISSIONS;
 }
 
 public class UpdatePermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionRepository elasticPermissionRepository,
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository,
+    IKafkaProducer kafkaProducer)
     : IRequestHandler<UpdatePermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
-
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
+    private readonly IKafkaProducer _kafkaProducer = kafkaProducer;
 
     public async Task Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
 
-        var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
+        var pRepository = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
 
-        var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
+        var permission = await _elasticPermissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (permission is null)
         {
             throw new EntityNotFoundException(nameof(Domain.Permission), request.Id);
         }
 
-        var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();
-
-        var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
+        var ptDomain = await _elasticPermissionTypeRepository.GetByIdAsync(request.PermissionTypeId, cancellationToken);
 
         if (ptDomain is null)
         {
@@ -65,9 +65,6 @@ public class UpdatePermissionCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        #region ElasticSearch
-        var indexablePermission = _autoMapper.Map<IndexablePermission>(updatedP);
-        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
+        await _kafkaProducer.PublishEntityEventAsync(request.Topic, updatedP, request.Operation, cancellationToken);
     }
 }

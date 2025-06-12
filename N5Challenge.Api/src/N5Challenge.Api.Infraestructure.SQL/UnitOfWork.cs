@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using System;
@@ -13,11 +12,11 @@ namespace N5Challenge.Api.Infraestructure.SQL;
 
 public class UnitOfWork(
     AppDbContext context,
-    IRepositoryFactory repositoryFactory) : IUnitOfWork
+    IEfRepositoryFactory repositoryFactory) : IUnitOfWork
 {
     private readonly AppDbContext _context = context;
     private IDbContextTransaction? _transaction;
-    private readonly IRepositoryFactory _repositoryFactory = repositoryFactory;
+    private readonly IEfRepositoryFactory _repositoryFactory = repositoryFactory;
     private bool _disposed;
 
     public bool HasActiveTransaction => _transaction is not null;
@@ -87,6 +86,6 @@ public class UnitOfWork(
         }
     }
 
-    public TRepository GetRepository<TRepository>() where TRepository : IRepository =>
-        _repositoryFactory.GetRepository<TRepository>();
+    public TRepository GetEfRepository<TRepository>() where TRepository : IEfRepository =>
+        _repositoryFactory.GetEfRepository<TRepository>();
 }

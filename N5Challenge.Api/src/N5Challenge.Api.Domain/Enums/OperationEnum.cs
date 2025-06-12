@@ -9,7 +9,6 @@ namespace N5Challenge.Api.Domain.Enums;
 public enum OperationEnum
 {
     modify,
-    modify_partial,
     request,
     get
 }
