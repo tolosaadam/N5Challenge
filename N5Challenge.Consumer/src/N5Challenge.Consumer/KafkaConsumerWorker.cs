@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Confluent.Kafka.Admin;
 
 namespace N5Challenge.Consumer;
 
@@ -23,13 +24,49 @@ public class KafkaConsumerBackgroundService(IOptions<Domain.KafkaSettings> kpSet
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         using var adminClient = new AdminClientBuilder(_consumerConfig).Build();
+
+        var requiredTopics = new[] { "permissions", "permission_types" };
+
         var metadata = adminClient.GetMetadata(TimeSpan.FromSeconds(10));
-        var topics = metadata.Topics.Select(t => t.Topic).ToList();
+
+        var existingTopics = metadata.Topics.Select(t => t.Topic).ToHashSet();
+
+        var topicsToCreate = requiredTopics
+            .Where(t => !existingTopics.Contains(t))
+            .Select(t => new TopicSpecification
+            {
+                Name = t,
+                NumPartitions = 1,
+                ReplicationFactor = 1
+            })
+            .ToList();
+
+        if (topicsToCreate.Any())
+        {
+            try
+            {
+                await adminClient.CreateTopicsAsync(topicsToCreate);
+                Console.WriteLine("Topics creados correctamente.");
+            }
+            catch (CreateTopicsException e)
+            {
+                foreach (var result in e.Results)
+                {
+                    if (result.Error.Code != ErrorCode.TopicAlreadyExists)
+                        Console.WriteLine($"Error creando el topic {result.Topic}: {result.Error.Reason}");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("Todos los topics ya existen. No se creó ninguno.");
+        }
 
         using var consumer = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build();
-        consumer.Subscribe(topics);
 
-        Console.WriteLine($"Escuchando tópicos: {string.Join(", ", topics)}");
+        consumer.Subscribe(requiredTopics);
+
+        Console.WriteLine($"Escuchando tópicos: {string.Join(", ", requiredTopics)}");
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -45,7 +82,7 @@ public class KafkaConsumerBackgroundService(IOptions<Domain.KafkaSettings> kpSet
                     Console.WriteLine($"Auditable Event - {message} {topic}");
                     continue;
                 }
-                
+
                 await ProcessMessageAsync(topic, message, cancellationToken);
             }
             catch (OperationCanceledException)
