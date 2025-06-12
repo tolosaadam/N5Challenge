@@ -16,7 +16,7 @@ public class ElasticSearchService(
         var indexResponse = await _elasticClient
             .IndexAsync(entity, i => i
             .Index(indexName)
-            .Refresh(Elasticsearch.Net.Refresh.WaitFor), cancellationToken);
+            .Refresh(Elasticsearch.Net.Refresh.True), cancellationToken);
 
         if (!indexResponse.IsValid)
         {
@@ -30,7 +30,7 @@ public class ElasticSearchService(
             .BulkAsync(b => b
             .Index(indexName)
             .IndexMany(entities)
-            .Refresh(Elasticsearch.Net.Refresh.WaitFor), cancellationToken);
+            .Refresh(Elasticsearch.Net.Refresh.True), cancellationToken);
 
 
         if (bulkResponse.Errors)
@@ -44,7 +44,7 @@ public class ElasticSearchService(
         var indexResponse = _elasticClient
             .Index(entity, i => i
             .Index(indexName)
-            .Refresh(Elasticsearch.Net.Refresh.WaitFor));
+            .Refresh(Elasticsearch.Net.Refresh.True));
 
         if (!indexResponse.IsValid)
         {
@@ -58,7 +58,7 @@ public class ElasticSearchService(
             .Bulk(b => b
             .Index(indexName)
             .IndexMany(entities)
-            .Refresh(Elasticsearch.Net.Refresh.WaitFor));
+            .Refresh(Elasticsearch.Net.Refresh.True));
 
 
         if (bulkResponse.Errors)
