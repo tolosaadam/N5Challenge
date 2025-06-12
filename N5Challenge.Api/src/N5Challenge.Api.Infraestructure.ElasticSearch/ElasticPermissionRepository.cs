@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Infraestructure.Entities;
-using N5Challenge.Common.Constants;
-using N5Challenge.Common.Infraestructure.Indexables;
+using N5Challenge.Api.Domain.Constants;
+using N5Challenge.Api.Infraestructure.Indexables;
 using Nest;
 using System;
 using System.Collections.Generic;

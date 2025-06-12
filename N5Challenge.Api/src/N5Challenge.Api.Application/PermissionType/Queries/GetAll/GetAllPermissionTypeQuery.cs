@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Common.Enums;
+using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

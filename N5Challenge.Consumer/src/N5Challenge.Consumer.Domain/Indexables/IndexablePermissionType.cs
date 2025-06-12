@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common.Infraestructure.Indexables;
+namespace N5Challenge.Consumer.Domain.Indexables;
 
 public class IndexablePermissionType : IndexableEntity
 {

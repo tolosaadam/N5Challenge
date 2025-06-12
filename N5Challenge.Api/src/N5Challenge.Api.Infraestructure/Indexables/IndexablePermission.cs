@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure.Entities;
+namespace N5Challenge.Api.Infraestructure.Indexables;
 
-public class PermissionDB : Entity<int>
+public class IndexablePermission : IndexableEntity
 {
     public string? EmployeeFirstName { get; set; }
     public string? EmployeeLastName { get; set; }
-    public DateTime? Date { get; set; }
-
+    public DateTime Date { get; set; }
     public int PermissionTypeId { get; set; }
-    public PermissionTypeDB? Type { get; set; }
 }

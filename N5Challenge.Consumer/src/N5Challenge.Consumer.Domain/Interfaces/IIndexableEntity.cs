@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common.Enums;
+namespace N5Challenge.Consumer.Domain.Interfaces;
 
-public enum OperationEnum
+public interface IIndexableEntity : IEntity<string>
 {
-    modify,
-    request,
-    get
 }

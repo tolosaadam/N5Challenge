@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\N5Challenge.Common\N5Challenge.Common\N5Challenge.Common.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Domain\N5Challenge.Api.Domain.csproj" />
   </ItemGroup>
 

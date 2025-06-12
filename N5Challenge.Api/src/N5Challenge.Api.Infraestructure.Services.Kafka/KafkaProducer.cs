@@ -3,9 +3,8 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Common.Enums;
-using N5Challenge.Common.Infraestructure;
-using N5Challenge.Common.Infraestructure.Dictionaries;
+using N5Challenge.Api.Domain.Enums;
+using N5Challenge.Api.Infraestructure.Dictionaries;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Api.Infraestructure.Entities;
+namespace N5Challenge.Api.Infraestructure.Indexables;
 
-public class PermissionTypeDB : Entity<int>
+public class IndexablePermissionType : IndexableEntity
 {
     public string? Description { get; set; }
-
-    public ICollection<PermissionDB>? Permissions { get; set; }
 }

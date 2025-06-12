@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Infraestructure.Constants;
-using N5Challenge.Api.Infraestructure.Entities;
-using N5Challenge.Common.Constants;
 using Nest;
 using System;
 using System.Collections.Generic;

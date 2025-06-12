@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
-using N5Challenge.Common.Infraestructure;
+using N5Challenge.Api.Infraestructure.Entities;
 using Nest;
 using System.Security.Cryptography;
 using System.Threading;

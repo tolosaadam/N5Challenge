@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common.Constants;
+namespace N5Challenge.Consumer.Domain.Constants;
 
 public static class EntityRawNameConstants
 {

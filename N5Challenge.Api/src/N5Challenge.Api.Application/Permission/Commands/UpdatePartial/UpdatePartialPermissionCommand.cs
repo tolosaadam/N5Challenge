@@ -2,8 +2,8 @@
 using MediatR;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Common.Constants;
-using N5Challenge.Common.Enums;
+using N5Challenge.Api.Domain.Constants;
+using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

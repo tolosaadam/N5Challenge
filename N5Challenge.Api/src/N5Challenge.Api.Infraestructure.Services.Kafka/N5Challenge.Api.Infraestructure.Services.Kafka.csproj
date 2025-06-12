@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\N5Challenge.Common\N5Challenge.Common.Infraestructure\N5Challenge.Common.Infraestructure.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Application.Interfaces\N5Challenge.Api.Application.Interfaces.csproj" />
     <ProjectReference Include="..\N5Challenge.Api.Infraestructure\N5Challenge.Api.Infraestructure.csproj" />
   </ItemGroup>

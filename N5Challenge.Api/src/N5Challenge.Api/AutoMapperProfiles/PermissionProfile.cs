@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using N5Challenge.Api.Infraestructure.Entities;
-using N5Challenge.Common.Infraestructure.Indexables;
+using N5Challenge.Api.Infraestructure.Indexables;
 
 namespace N5Challenge.Api.AutoMapperProfiles;
 

@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using N5Challenge.Common.Infraestructure.Dictionaries;
-using N5Challenge.Common.Infraestructure.Indexables;
-using N5Challenge.Common.Enums;
-using N5Challenge.Common.Infraestructure;
 
 namespace N5Challenge.Consumer;
 
-public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSettings, IServiceProvider serviceProvider) : BackgroundService
+public class KafkaConsumerBackgroundService(IOptions<Domain.KafkaSettings> kpSettings, IServiceProvider serviceProvider) : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
@@ -65,7 +61,7 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
 
     private async Task ProcessMessageAsync(string topic, string json, CancellationToken cancellationToken)
     {
-        var entityType = KafkaEntityDictionary.GetEntityTypeFromTopic(topic);
+        var entityType = Domain.Dictionaries.KafkaEntityDictionary.GetEntityTypeFromTopic(topic);
         if (entityType is null)
         {
             Console.WriteLine($"Tipo no mapeado para el tópico '{topic}'");
@@ -73,7 +69,7 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
         }
 
         // Construye KafkaEvent<entityType> dinámicamente
-        var kafkaEventType = typeof(KafkaEvent<>).MakeGenericType(entityType);
+        var kafkaEventType = typeof(Domain.KafkaEvent<>).MakeGenericType(entityType);
 
         // Deserializa el JSON al tipo correcto
         var envelope = JsonSerializer.Deserialize(json, kafkaEventType);
@@ -84,7 +80,7 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
         }
 
         // Obtiene Operation y Payload por reflexión
-        var operation = (OperationEnum)kafkaEventType.GetProperty("Operation")!.GetValue(envelope)!;
+        var operation = (Domain.Enums.OperationEnum)kafkaEventType.GetProperty("Operation")!.GetValue(envelope)!;
         var payload = kafkaEventType.GetProperty("Payload")!.GetValue(envelope)!;
 
         using var scope = _serviceProvider.CreateScope();
@@ -92,11 +88,11 @@ public class KafkaConsumerBackgroundService(IOptions<Common.KafkaSettings> kpSet
 
         switch (operation)
         {
-            case OperationEnum.request:
-                await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
+            case Domain.Enums.OperationEnum.request:
+                await elasticService.IndexAsync(entity: (Domain.Indexables.IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
                 break;
-            case OperationEnum.modify:
-                await elasticService.IndexAsync(entity: (IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
+            case Domain.Enums.OperationEnum.modify:
+                await elasticService.IndexAsync(entity: (Domain.Indexables.IndexableEntity)payload, indexName: topic, cancellationToken: cancellationToken);
                 break;
             default:
                 break;

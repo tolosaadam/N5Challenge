@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common;
+namespace N5Challenge.Api.Domain;
 
 public class KafkaSettings
 {

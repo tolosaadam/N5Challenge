@@ -1,12 +1,12 @@
-﻿using N5Challenge.Common.Constants;
-using N5Challenge.Common.Infraestructure.Indexables;
+﻿using N5Challenge.Api.Domain.Constants;
+using N5Challenge.Api.Infraestructure.Indexables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common.Infraestructure.Dictionaries;
+namespace N5Challenge.Api.Infraestructure.Dictionaries;
 
 public static class KafkaEntityDictionary
 {

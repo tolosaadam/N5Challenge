@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace N5Challenge.Common.Infraestructure;
+namespace N5Challenge.Api.Domain.Enums;
 
-public interface IEntity<TId>
+public enum OperationEnum
 {
-    TId Id { get; }
+    modify,
+    request,
+    get
 }

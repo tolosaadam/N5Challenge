@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using N5Challenge.Api.Application.Interfaces.Persistence;
 using N5Challenge.Api.Domain;
-using N5Challenge.Common.Infraestructure;
+using N5Challenge.Api.Infraestructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
