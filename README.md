@@ -88,6 +88,18 @@ The Web API includes unit tests written with **MSTest**.
 
 ---
 
+🆕 Updates (2025-06-12)
+
+- Added a background service named Consumer, which listens to Kafka events (e.g., create, update) for all entities. Upon consuming an event, it writes or updates the corresponding document in Elasticsearch.
+
+- All read operations are now performed directly against Elasticsearch, which stays up-to-date thanks to Kafka events.
+
+- Entity Framework is now only used for write operations against SQL Server (i.e., create, update, delete).
+
+- Kafka events are still emitted for all operations (GET, POST, PUT) to allow auditing and synchronization across systems.
+
+---
+
 ### 👤 Author
 
 **Adam Ezequiel Tolosa**  
