@@ -2,12 +2,11 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
 using N5Challenge.Api.Application.Permission.Commands.Update;
 using N5Challenge.Api.Domain;
+using N5Challenge.Api.Domain.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +20,10 @@ public class UpdatePermissionCommandHandlerTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IEfPermissionRepository> _pRepositoryMock = new();
-    private readonly Mock<IEfPermissionTypeRepository> _pTypeRepositoryMock = new();
+    private readonly Mock<IElasticPermissionTypeRepository> _elasticPermissionTypeRepositoryMock = new();
+    private readonly Mock<IElasticPermissionRepository> _elasticPermissionRepositoryMock = new();
     private readonly Mock<IMapper> _autoMapperMock = new();
-    private readonly Mock<IElasticSearch> _elasticSearchMock = new();
+    private readonly Mock<IKafkaProducer> _kafkaProducerMock = new();
 
     private UpdatePermissionCommandHandler _handler = null!;
 
@@ -34,14 +34,12 @@ public class UpdatePermissionCommandHandlerTests
             .Setup(u => u.GetEfRepository<IEfPermissionRepository>())
             .Returns(_pRepositoryMock.Object);
 
-        _unitOfWorkMock
-            .Setup(u => u.GetEfRepository<IEfPermissionTypeRepository>())
-            .Returns(_pTypeRepositoryMock.Object);
-
         _handler = new UpdatePermissionCommandHandler(
             _unitOfWorkMock.Object,
             _autoMapperMock.Object,
-            _elasticSearchMock.Object
+            _elasticPermissionRepositoryMock.Object,
+            _elasticPermissionTypeRepositoryMock.Object,
+            _kafkaProducerMock.Object
         );
     }
 
@@ -65,13 +63,12 @@ public class UpdatePermissionCommandHandlerTests
             Type = pType
         };
 
-        var indexablePermission = new IndexablePermission("1");
 
-        _pRepositoryMock
+        _elasticPermissionRepositoryMock
             .Setup(r => r.GetByIdAsync(command.Id, cancellationToken))
             .ReturnsAsync(permission);
 
-        _pTypeRepositoryMock
+        _elasticPermissionTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
             .ReturnsAsync(pType);
 
@@ -83,22 +80,22 @@ public class UpdatePermissionCommandHandlerTests
             .Setup(r => r.Update(permission))
             .Returns(permission);
 
-        _autoMapperMock
-            .Setup(m => m.Map<IndexablePermission>(permission))
-            .Returns(indexablePermission);
+        _kafkaProducerMock
+            .Setup(e => e.PublishEntityEventAsync(EntityRawNameConstants.PERMISSIONS, permission, Domain.Enums.OperationEnum.modify, cancellationToken))
+            .Returns(Task.CompletedTask);
 
-        _elasticSearchMock
-            .Setup(e => e.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken))
+        _kafkaProducerMock
+            .Setup(e => e.PublishAuditableEventAsync(EntityRawNameConstants.PERMISSIONS, Domain.Enums.OperationEnum.modify, cancellationToken))
             .Returns(Task.CompletedTask);
 
         // Act
         await _handler.Handle(command, cancellationToken)!;
 
         // Assert
-        _pRepositoryMock.Verify(r => r.GetByIdAsync(command.Id, cancellationToken), Times.Once,
+        _elasticPermissionRepositoryMock.Verify(r => r.GetByIdAsync(command.Id, cancellationToken), Times.Once,
             "Should retrieve existing permission by ID");
 
-        _pTypeRepositoryMock.Verify(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken), Times.Once,
+        _elasticPermissionTypeRepositoryMock.Verify(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken), Times.Once,
             "Should retrieve permission type by ID");
 
         _autoMapperMock.Verify(m => m.Map<Domain.Permission>(command), Times.Once,
@@ -110,12 +107,9 @@ public class UpdatePermissionCommandHandlerTests
             p.Type == permission.Type)), Times.Once,
             "Should update permission with correct values");
 
-        _autoMapperMock.Verify(m => m.Map<IndexablePermission>(permission), Times.Once,
-            "Should map the permission to IndexablePermission");
-
-        _elasticSearchMock.Verify(e =>
-            e.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken),
-            Times.Once, "Should index the permission in ElasticSearch once");
+        _kafkaProducerMock.Verify(e =>
+            e.PublishEntityEventAsync(EntityRawNameConstants.PERMISSIONS, permission, Domain.Enums.OperationEnum.modify, cancellationToken),
+            Times.Once, "Permission should be indexed in Elastic once");
     }
 
 
@@ -139,11 +133,11 @@ public class UpdatePermissionCommandHandlerTests
             Type = pType
         };
 
-        _pRepositoryMock
+        _elasticPermissionRepositoryMock
             .Setup(r => r.GetByIdAsync(command.Id, cancellationToken))
             .ReturnsAsync(permission);
 
-        _pTypeRepositoryMock
+        _elasticPermissionTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
             .ReturnsAsync((Domain.PermissionType?)null);
 
@@ -161,7 +155,7 @@ public class UpdatePermissionCommandHandlerTests
 
         var cancellationToken = CancellationToken.None;
 
-        _pTypeRepositoryMock
+        _elasticPermissionTypeRepositoryMock
             .Setup(r => r.GetByIdAsync(command.PermissionTypeId, cancellationToken))
             .ReturnsAsync((Domain.PermissionType?)null);
 
