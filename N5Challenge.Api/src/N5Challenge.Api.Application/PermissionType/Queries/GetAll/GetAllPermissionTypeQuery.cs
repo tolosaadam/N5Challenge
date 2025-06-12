@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace N5Challenge.Api.Application.PermissionType.Queries.GetAll;
 
-public record GetAllPermissionTypeQuery() : IRequest<IEnumerable<Domain.PermissionType>>, IPublishEvent
+public record GetAllPermissionTypeQuery() : IRequest<IEnumerable<Domain.PermissionType>>, IPublishAuditableEvent
 {
     public OperationEnum Operation => OperationEnum.get;
 
@@ -18,15 +18,14 @@ public record GetAllPermissionTypeQuery() : IRequest<IEnumerable<Domain.Permissi
 };
 
 public class GetAllPermissionTypeQueryHandler(
-    IUnitOfWork unitOfWork)
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository)
     : IRequestHandler<GetAllPermissionTypeQuery, IEnumerable<Domain.PermissionType>>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
 
     public async Task<IEnumerable<Domain.PermissionType>> Handle(GetAllPermissionTypeQuery request, CancellationToken cancellationToken)
     {
-        var repo = _unitOfWork.GetRepository<IPermissionTypeRepository>();
-        var permissionTypes = await repo.GetAllAsync(cancellationToken);
+        var permissionTypes = await _elasticPermissionTypeRepository.GetAllAsync(cancellationToken);
 
         return permissionTypes;
     }

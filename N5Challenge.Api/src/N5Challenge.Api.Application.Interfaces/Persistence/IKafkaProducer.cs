@@ -9,5 +9,6 @@ namespace N5Challenge.Api.Application.Interfaces.Persistence;
 
 public interface IKafkaProducer
 {
-    Task SendMessageAsync(string topic, OperationEnum operation, CancellationToken cancellationToken = default);
+    Task PublishAuditableEventAsync(string topic, OperationEnum operation, CancellationToken cancellationToken = default);
+    Task PublishEntityEventAsync<TDomainModel>(string topic, TDomainModel entity, OperationEnum operation, CancellationToken cancellationToken = default);
 }

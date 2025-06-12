@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
-using N5Challenge.Api.Application.Permission.Queries.GetAll;
 using N5Challenge.Api.Application.PermissionType.Queries.GetAll;
 using System;
 using System.Collections.Generic;
@@ -17,20 +14,16 @@ namespace N5Challenge.Api.UnitTests.Application.PermissionType.Queries.GetAll;
 [TestClass]
 public class GetAllPermissionTypeQueryHandlerTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IPermissionTypeRepository> _ptRepositoryMock = new();
+    private readonly Mock<IElasticPermissionTypeRepository> _elasticPtRepositoryMock = new();
 
     private GetAllPermissionTypeQueryHandler _handler = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _unitOfWorkMock
-            .Setup(u => u.GetRepository<IPermissionTypeRepository>())
-            .Returns(_ptRepositoryMock.Object);
 
         _handler = new GetAllPermissionTypeQueryHandler(
-            _unitOfWorkMock.Object
+            _elasticPtRepositoryMock.Object
         );
     }
 
@@ -46,7 +39,7 @@ public class GetAllPermissionTypeQueryHandlerTests
             new() { Id = 2 }
         };
 
-        _ptRepositoryMock
+        _elasticPtRepositoryMock
             .Setup(r => r.GetAllAsync(cancellationToken))  
             .ReturnsAsync(permissionTypes);
 

@@ -1,6 +1,6 @@
 ﻿namespace N5Challenge.Api.Domain;
 
-public class Permission : Entity<int>
+public class Permission : DomainEntity<int>
 {
     public string? EmployeeFirstName { get; set; }
     public string? EmployeeLastName { get; set; }

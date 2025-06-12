@@ -22,7 +22,7 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("N5Challenge.Api.Infraestructure.SQL.Entities.PermissionDB", b =>
+            modelBuilder.Entity("N5Challenge.Api.Infraestructure.Entities.PermissionDB", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,6 +52,7 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                         new
                         {
                             Id = 1,
+                            Date = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeFirstName = "Adam",
                             EmployeeLastName = "Tolosa",
                             PermissionTypeId = 1
@@ -59,13 +60,14 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                         new
                         {
                             Id = 2,
+                            Date = new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EmployeeFirstName = "Tolosa",
                             EmployeeLastName = "Adam",
                             PermissionTypeId = 2
                         });
                 });
 
-            modelBuilder.Entity("N5Challenge.Api.Infraestructure.SQL.Entities.PermissionTypeDB", b =>
+            modelBuilder.Entity("N5Challenge.Api.Infraestructure.Entities.PermissionTypeDB", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,9 +100,9 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("N5Challenge.Api.Infraestructure.SQL.Entities.PermissionDB", b =>
+            modelBuilder.Entity("N5Challenge.Api.Infraestructure.Entities.PermissionDB", b =>
                 {
-                    b.HasOne("N5Challenge.Api.Infraestructure.SQL.Entities.PermissionTypeDB", "Type")
+                    b.HasOne("N5Challenge.Api.Infraestructure.Entities.PermissionTypeDB", "Type")
                         .WithMany("Permissions")
                         .HasForeignKey("PermissionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -109,7 +111,7 @@ namespace N5Challenge.Api.Infraestructure.SQL.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("N5Challenge.Api.Infraestructure.SQL.Entities.PermissionTypeDB", b =>
+            modelBuilder.Entity("N5Challenge.Api.Infraestructure.Entities.PermissionTypeDB", b =>
                 {
                     b.Navigation("Permissions");
                 });

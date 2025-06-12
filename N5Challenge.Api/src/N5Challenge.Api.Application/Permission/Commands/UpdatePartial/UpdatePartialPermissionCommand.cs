@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using N5Challenge.Api.Application.Constants;
 using N5Challenge.Api.Application.Exceptions;
 using N5Challenge.Api.Application.Interfaces.Persistence;
-using N5Challenge.Api.Application.Models;
+using N5Challenge.Api.Domain.Constants;
 using N5Challenge.Api.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -18,29 +17,31 @@ public record UpdatePartialPermissionCommand(
     string? EmployeeFirstName,
     string? EmployeeLastName,
     int? PermissionTypeId,
-    DateTime? Date) : IRequest, ICommand, IPublishEvent, IValidate
+    DateTime? Date) : IRequest, ICommand, IPublishAuditableEvent, IValidate
 {
-    public OperationEnum Operation => OperationEnum.modify_partial;
-    public string Topic => "permission";
+    public OperationEnum Operation => OperationEnum.modify;
+    public string Topic => EntityRawNameConstants.PERMISSIONS;
 }
 
 public class UpdatePartialPermissionCommandHandler(
     IUnitOfWork unitOfWork,
     IMapper autoMapper,
-    IElasticSearch elasticSearch)
+    IElasticPermissionRepository elasticPermissionRepository,
+    IElasticPermissionTypeRepository elasticPermissionTypeRepository,
+    IKafkaProducer kafkaProducer)
     : IRequestHandler<UpdatePartialPermissionCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _autoMapper = autoMapper;
-    private readonly IElasticSearch _elasticSearch = elasticSearch;
-
+    private readonly IElasticPermissionRepository _elasticPermissionRepository = elasticPermissionRepository;
+    private readonly IElasticPermissionTypeRepository _elasticPermissionTypeRepository = elasticPermissionTypeRepository;
+    private readonly IKafkaProducer _kafkaProducer = kafkaProducer;
 
     public async Task Handle(UpdatePartialPermissionCommand request, CancellationToken cancellationToken)
     {
+        var pRepository = _unitOfWork.GetEfRepository<IEfPermissionRepository>();
 
-        var pRepository = _unitOfWork.GetRepository<IPermissionRepository>();
-
-        var permission = await pRepository.GetByIdAsync(request.Id, cancellationToken);
+        var permission = await _elasticPermissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (permission is null)
         {
@@ -49,10 +50,7 @@ public class UpdatePartialPermissionCommandHandler(
 
         if (request.PermissionTypeId is not null)
         {
-            var ptRepository = _unitOfWork.GetRepository<IPermissionTypeRepository>();
-
-
-            var ptDomain = await ptRepository.GetByIdAsync(request.PermissionTypeId.Value, cancellationToken);
+            var ptDomain = await _elasticPermissionTypeRepository.GetByIdAsync(request.PermissionTypeId.Value, cancellationToken);
 
             if (ptDomain is null)
             {
@@ -69,9 +67,6 @@ public class UpdatePartialPermissionCommandHandler(
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        #region ElasticSearch
-        var indexablePermission = _autoMapper.Map<IndexablePermission>(updatedP);
-        await _elasticSearch.IndexAsync(indexablePermission, IndexNamesConstans.PERMISSION_INDEX_NAME, cancellationToken);
-        #endregion
+        await _kafkaProducer.PublishEntityEventAsync(request.Topic, updatedP, request.Operation, cancellationToken);
     }
 }
